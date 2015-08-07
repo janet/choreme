@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <title>Chore Me</title>
+</head>
+
+<body>
+  Chore Me
+  
+<!-- If no user logged in, display login button -->
+<!--   {% if session['user_id'] %}
+      <form action='/logout' align="right">
+            <span>
+            <button>Logout</button>
+            </span>
+      </form>
+  
+  {% else %}
+  <form action='/login' align="right">
+        <span>
+        <button>Login</button>
+        </span>
+  </form>
+  {% endif %}
+  
+  <hr>
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %} -->
+
+  {% block content %} put your content here {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form action="/create_house_pref_1">
+	How many in your household? 
+	<input type="number" min="2" step="1" name="household" required><br>
+	<input type="submit" value="Next">	
+</form>
+
+{% endblock %}
