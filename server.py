@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db
+from model import User, House, Schedule, ScheduleLength, HouseChore, DayOfWeek, WeekFreq, Chore, UserChore
 from twilio.rest import TwilioRestClient 
 import twilio.twiml
 import os
@@ -62,7 +63,40 @@ def login():
 def sign_up():
     """Request user information for both invited and new users and add to the database"""
 
-    return render_template('sign_up.html')
+    is_invited = request.args.get('is_invited') #this is the user_id 
+    if is_invited:
+        invited_user = User.query.get(int(is_invited))
+        phone = invited_user.phone
+        return render_template('sign_up.html', phone=phone)
+    else:
+        return render_template('sign_up.html')
+
+@app.route("/add_user", methods=['POST', 'GET'])
+def add_user():
+    """Add user into database from sign_up form."""
+
+    is_invited = request.args.get('is_invited') #this is the user_id
+
+
+    if is_invited:
+        invited_user = User.query.get(int(is_invited))
+        invited_user.password = password
+
+    else:
+        username = request.form.get('username')
+        phone = request.form.get('phone')
+        password = request.form.get('password')
+
+        new_user = User(username=username,
+                        phone=phone,
+                        password=password,
+                        is_admin=True)
+        db.session.add(new_user)
+        db.session.commit()
+
+    # print "username: %s, phone: %s, password: %s" % (username, phone, password)
+
+    return redirect('/create_house')
 
 @app.route("/create_house", methods=['GET'])
 def create_house():
