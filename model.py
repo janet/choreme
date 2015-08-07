@@ -24,7 +24,7 @@ class User(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return "<User user_id=%s email=%s>" % (self.user_id, self.email)
+        return "<User user_id=%s username=%s>" % (self.user_id, self.username)
 
 class House(db.Model):
     """House information"""

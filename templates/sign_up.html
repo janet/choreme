@@ -4,9 +4,13 @@
 <h2>Sign Up</h2>
 <form action="/add_user" method="POST">
 	<input type="text" name="username" placeholder="Username" required><br>
-	<input type="text" name="phone" placeholder="+15105555555" value="{{ phone }}" required><br>
+	<input type="text" name="phone" placeholder="+15105555555" value="{{ phone }}" required><br>	
 	<input type="password" placeholder="Password" name="password" required><br>
     <input type="password" placeholder="Confirm Password" id="confirm_password" required><br>
+    {% if phone %}
+    hi
+    <input type="text" name="is_invited" value="{{ invited_user.user_id }}"><br>    
+    {% endif %}
 	<input type="submit" value="Sign Up">	
 </form>
 

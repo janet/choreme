@@ -63,11 +63,12 @@ def login():
 def sign_up():
     """Request user information for both invited and new users and add to the database"""
 
-    is_invited = request.args.get('is_invited') #this is the user_id 
+    is_invited = request.args.get('is_invited') # this is the user_id 
+
     if is_invited:
         invited_user = User.query.get(int(is_invited))
         phone = invited_user.phone
-        return render_template('sign_up.html', phone=phone)
+        return render_template('sign_up.html', invited_user=invited_user, phone=phone)
     else:
         return render_template('sign_up.html')
 
@@ -75,26 +76,25 @@ def sign_up():
 def add_user():
     """Add user into database from sign_up form."""
 
-    is_invited = request.args.get('is_invited') #this is the user_id
-
+    is_invited = request.form.get('is_invited') #this is the user_id
+    username = request.form.get('username')
+    phone = request.form.get('phone')
+    password = request.form.get('password')
 
     if is_invited:
         invited_user = User.query.get(int(is_invited))
+        invited_user.username = username
+        invited_user.phone = phone
         invited_user.password = password
 
     else:
-        username = request.form.get('username')
-        phone = request.form.get('phone')
-        password = request.form.get('password')
-
         new_user = User(username=username,
                         phone=phone,
                         password=password,
                         is_admin=True)
         db.session.add(new_user)
-        db.session.commit()
+    db.session.commit()
 
-    # print "username: %s, phone: %s, password: %s" % (username, phone, password)
 
     return redirect('/create_house')
 
