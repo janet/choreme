@@ -1,9 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<h2>Create House Preferences P3</h2>
+<div>
+go to scheduling_algorithm route that will redirect to calendar view when done
+</div>
+
 <form action="/scheduling_algorithm">
-	go to scheduling_algorithm that will render the calendar view when done
-	<input type="submit" value="CHORE ME">	
+	Schedule out for: 
+		<input type="number" min="1" max="12" name="shedule_length" required>
+			months<br>
+		<input type="hidden" name="chores" value="">hidden input value of unpacked chores + freq<br>
+		<input type="hidden" name="household" value="">hidden input value of household number<br>
+		<input type="submit" value="CHORE ME">	
 </form>
+<br>
+
+<input type="button" onclick="location.href='/create_house_pref_1'" value="Back"><br>
+
 
 {% endblock %}

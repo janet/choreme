@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<h2>Sign Up</h2>
 <form action="/create_house">
-	<input type="email" name="email" required placeholder="Email Address"><br>
+	<input type="text" name="username" placeholder="Username" required><br>
+	<input type="text" name="phone" placeholder="+15105555555" required><br>
+	<input type="password" placeholder="Password" id="password" required><br>
+    <input type="password" placeholder="Confirm Password" id="confirm_password" required><br>
 	<input type="submit" value="Sign Up">	
 </form>
 

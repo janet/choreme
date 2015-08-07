@@ -1,6 +1,6 @@
 """Utility file to seed choreme database with dummy data from seed_data file"""
 
-from model import User, House, Schedule, HouseChore, DayOfWeek, WeekFreq, Chore, UserChore
+from model import User, House, Schedule, ScheduleLength, HouseChore, DayOfWeek, WeekFreq, Chore, UserChore
 from model import connect_to_db, db
 from server import app
 from datetime import datetime
@@ -14,11 +14,10 @@ def load_users():
         
         new_user = User(
             house_id=int(seed_line[0]),
-            email=seed_line[1],
-            first_name=seed_line[2],
-            password=seed_line[3],
-            phone=int(seed_line[4]),
-            is_admin=bool(seed_line[5])
+            username=seed_line[1],
+            password=seed_line[2],
+            phone=int(seed_line[3]),
+            is_admin=bool(seed_line[4])
             )
         db.session.add(new_user)
     db.session.commit()
@@ -46,14 +45,30 @@ def load_schedule():
         
         new_sched = Schedule(
             house_id=int(seed_line[0]),
-            end_date=datetime.strptime(seed_line[1], "%w, %m/%d/%y")
+            start_date=datetime.strptime(seed_line[1], "%w, %m/%d/%y"),
+            end_date=datetime.strptime(seed_line[2], "%w, %m/%d/%y"),
+            schedule_length=int(seed_line[3])
             )
         db.session.add(new_sched)
     db.session.commit()
 
+def load_schedule_length():
+    """Load schedule_length ref table from schedule_length into database."""
+    seed_file = open("seed_data/schedule_length")
+    for line in seed_file:
+        line = line.rstrip()
+        seed_line = line.split("\t")
+        
+        new_sched_len = ScheduleLength(
+            sched_len_value=int(seed_line[0]),
+            sched_len_in_weeks=int(seed_line[1])
+            )
+
+        db.session.add(new_sched_len)
+    db.session.commit()   
 
 def load_day_of_week():
-    """Load day_of_week ref table from dow into database."""
+    """Load day_of_week ref table from day_of_week into database."""
     seed_file = open("seed_data/day_of_week")
     for line in seed_file:
         line = line.rstrip()
@@ -136,6 +151,7 @@ if __name__ == "__main__":
     load_houses()
     load_users()
     load_schedule()
+    load_schedule_length()
     load_day_of_week()
     load_week_freq()
     load_house_chore()

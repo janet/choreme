@@ -32,27 +32,31 @@ MY_TWILIO_NUMBER = os.environ['MY_TWILIO_NUMBER']
 
 ##############################################################################
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/twilio", methods=['GET', 'POST'])
 def hello_monkey():
     """Respond and greet the caller by name."""
  
-   #  from_number = request.values.get('From', None)
-   #  if from_number in callers:
-   #      message = callers[from_number] + ", thanks for the message!"
-   #      client.messages.create(
-			# to=from_number, 
-			# from_=MY_TWILIO_NUMBER, 
-			# body=message,  
-   #      )
-   #  else:
-   #      message = "Monkey, thanks for the message!"
+    from_number = request.values.get('From', None)
+    if from_number in callers:
+        message = callers[from_number] + ", thanks for the message!"
+        client.messages.create(
+			to=from_number, 
+			from_=MY_TWILIO_NUMBER, 
+			body=message,  
+        )
+    else:
+        message = "Monkey, thanks for the message!"
  
-   #  resp = twilio.twiml.Response()
-   #  resp.message(message)
+    resp = twilio.twiml.Response()
+    resp.message(message)
  
-   #  return str(resp)
+    return str(resp)
 
-    return render_template('base.html')
+@app.route("/", methods=['GET'])
+def login():
+    """Index route will be a login page requesting username and password"""
+
+    return render_template('index.html')
 
 @app.route("/sign_up", methods=['GET'])
 def sign_up():
@@ -111,6 +115,11 @@ def personal_view():
 
     return render_template('personal_view.html')
 
+@app.route("/house_pref_view", methods=['GET'])
+def house_pref_view():
+    """Renders summary of house preferences."""
+
+    return render_template('house_pref_view_only.html')
 print "you are awesome"
  
 if __name__ == "__main__":

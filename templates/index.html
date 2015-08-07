@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Login Page</h2>
+<form action="/personal_view">
+	<input type="text" name="username" required placeholder="username"><br>
+	<input type="password" name="password" required placeholder="password"><br>
+	<input type="submit" value="Login"><br>
+	<a href="/sign_up">or Sign Up</a>
+</form>
+
+{% endblock %}

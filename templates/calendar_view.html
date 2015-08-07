@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form action="/personal_view">
-	go to personal view
-	<input type="submit" value="Personal View">	
-</form>
+<h2>Calendar View</h2>
+<input type="button" onclick="location.href='/personal_view';" value="Personal View">
+<input type="button" onclick="location.href='/house_pref_view';" value="House Pref"> 
 
 {% endblock %}

@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -12,10 +13,9 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     house_id = db.Column(db.Integer, db.ForeignKey('house.house_id'), nullable=True)
-    email = db.Column(db.String(100), nullable=False, unique=True)
-    first_name = db.Column(db.String(64), nullable=True)
+    username = db.Column(db.String(64), nullable=True, unique=True)
     password = db.Column(db.String(64), nullable=True)
-    phone = db.Column(db.Integer, nullable=True)
+    phone = db.Column(db.Integer, nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
     # define a relationship to House
@@ -47,7 +47,10 @@ class Schedule(db.Model):
 
     schedule_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     house_id = db.Column(db.Integer, db.ForeignKey('house.house_id'), nullable=False)
+    create_date = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
+    schedule_length = db.Column(db.Integer, db.ForeignKey('schedule_length.sched_len_value'), nullable=False)
 
     # define a relationship to House
     house = db.relationship("House",
@@ -56,6 +59,19 @@ class Schedule(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return "<Schedule schedule_id=%s end_date=%s>" % (self.schedule_id, self.end_date)
+
+class ScheduleLength(db.Model):
+    """Reference Table for schedule length and holds month to week conversion."""
+
+    __tablename__ = "schedule_length"
+
+    sched_len_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    sched_len_value = db.Column(db.Integer, nullable=False)
+    sched_len_in_weeks = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+        return "<ScheduleLength sched_len_id=%s sched_len_value=%s sched_len_in_weeks=%s>" % (self.sched_len_id, self.sched_len_value, self.sched_len_in_weeks)
 
 class HouseChore(db.Model):
     """House chore with house preferred frequency & due date"""

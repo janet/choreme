@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form action="/create_house_pref_2">
-	go to create_house_pref_2
-	<input type="submit" value="Next">	
-</form>
+<h2>Create House Preferences</h2>
+
+Select From Table<br>
+
+Selected Table<br>
+<a href="/create_house_pref_2">Click on each chore to get to the chore page</a><br>
+
+"Please select a frequency for each chore"<br>
+
+<input type="button" onclick="location.href='/create_house_pref_3'" value="Next"><br>
 
 {% endblock %}

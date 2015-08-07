@@ -1,9 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form action="/create_house_pref_3">
-	go to create_house_pref_3
-	<input type="submit" value="Next">	
+<h2>Create House Preferences</h2>
+
+Chore<br>
+<form>
+	Chore Frequency: Once every 
+		<select name="week_freq">
+			<option value="unpack from week_freq ref table"></option><br>
+		</select><br>
+	Day of the week due:
+		<select name="day_of_week">
+			<option value="unpack from day_of_week ref table"></option><br>
+		</select>
 </form>
+
+<div>
+	Sammy image here<br>
+</div>
+
+"Please select a frequency for each chore"<br>
+
+<input type="button" onclick="location.href='/create_house_pref_1'" value="Save"><br>
+<a href="/create_house_pref_1">or Cancel</a>
 
 {% endblock %}
