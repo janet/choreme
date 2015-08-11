@@ -48,7 +48,7 @@ class HouseChore(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
     chore_id = db.Column(db.Integer, db.ForeignKey('chore.id'), nullable=False)
-    dow = db.Column(db.String(9), nullable=False)
+    day = db.Column(db.String(9), nullable=False)
     week_freq = db.Column(db.Integer, nullable=False) 
 
     # define a relationship to Schedule

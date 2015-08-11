@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db
 from model import User, House, HouseChore, Chore, UserChore
@@ -56,12 +56,16 @@ def hello_monkey():
 @app.route("/", methods=['GET'])
 def login():
     """Index route will be a login page requesting username and password"""
-
-    return render_template('index.html')
+    
+    if session["user_id"]:
+        return redirect("/calendar_view")
+    else:
+        session["user_id"] = None
+        return render_template("login.html")
 
 @app.route("/register", methods=['GET'])
 def register():
-    """Request user and house information from the admin user."""
+    """Request user registration details from the admin user."""
 
     return render_template('register.html')
 
@@ -105,12 +109,22 @@ def create_house_pref():
 
     return render_template('create_house_pref.html', chore_objs=chore_objs)
 
-@app.route("/create_house_pref_2", methods=['GET'])
-def create_house_pref_2():
-    """Step 2 of 3 for creating house preferences. Step 2 is rendering a modal window of each
-    chore chosen in Step 1 in order to set the week frequency and day of week due."""
+@app.route("/save_chore_freq", methods=['POST'])
+def temp_save_chore_freq():
+    """Pass chore frequency from modal window form to create_house_pref on modal window
+    save."""
+    
+    chore_name = request.form.get('chore')
+    week_freq = request.form.get('week_freq')
+    day = request.form.get('day')
 
-    return render_template('create_house_pref_2.html')
+
+
+
+
+    return jsonify({'chore_name': chore_name, 
+                    'week_freq': week_freq,
+                    'day': day})
 
 @app.route("/scheduling_algorithm", methods=['GET'])
 def scheduling_algorithm():
@@ -136,6 +150,41 @@ def house_pref_view():
     """Renders summary of house preferences."""
 
     return render_template('house_pref_view_only.html')
+
+@app.route('/process_login', methods=['POST'])
+def process_login():
+    """Process login form: Authenticate user and if new user, add to database"""
+
+    email_entered = request.form.get("email")
+    password_entered = request.form.get("password")
+    
+    try:
+        user_queried = User.query.filter_by(email=email_entered).one()
+        if user_queried.password != password_entered:
+            flash("Password is incorrect. Please re-enter.")
+            return redirect('/login') #re-enter password
+        else:
+            loggedin_user_id = user_queried.user_id
+
+    except NoResultFound:
+        new_user = User(
+            email=email_entered,
+            password=password_entered
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+        # db.session.flush()
+        loggedin_user_id = new_user.user_id
+
+    #adding logged in user to session
+    session['user_id'] = loggedin_user_id 
+
+    #created new user or validated existing user password and redirecting to home
+    flash("Logged in")
+
+    return redirect('/users/' + str(loggedin_user_id)) 
+
 print "you are awesome"
  
 if __name__ == "__main__":

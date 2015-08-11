@@ -48,7 +48,7 @@ def load_house_chore():
         new_house_chore = HouseChore(
             house_id=int(seed_line[0]),
             chore_id=int(seed_line[1]),
-            dow=seed_line[2],
+            day=seed_line[2],
             week_freq=seed_line[3]
             )
         db.session.add(new_house_chore)
