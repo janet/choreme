@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db
-from model import User, House, Schedule, ScheduleLength, HouseChore, DayOfWeek, WeekFreq, Chore, UserChore
+from model import User, House, HouseChore, Chore, UserChore
 from twilio.rest import TwilioRestClient 
 import twilio.twiml
 import os
@@ -59,62 +59,51 @@ def login():
 
     return render_template('index.html')
 
-@app.route("/sign_up", methods=['GET'])
-def sign_up():
-    """Request user information for both invited and new users and add to the database"""
+@app.route("/register", methods=['GET'])
+def register():
+    """Request user and house information from the admin user."""
 
-    is_invited = request.args.get('is_invited') # this is the user_id 
+    return render_template('register.html')
 
-    if is_invited:
-        invited_user = User.query.get(int(is_invited))
-        phone = invited_user.phone
-        return render_template('sign_up.html', invited_user=invited_user, phone=phone)
-    else:
-        return render_template('sign_up.html')
+@app.route("/invited_register/<int:user_id>", methods=['GET'])
+def invited_register(user_id):
+    """Request user information from invited (non-admin) users."""
 
-@app.route("/add_user", methods=['POST', 'GET'])
-def add_user():
-    """Add user into database from sign_up form."""
+    invited_user = User.query.filter_by(id=user_id).one()
 
-    is_invited = request.form.get('is_invited') #this is the user_id
+    return render_template('invited_register.html', invited_user=invited_user)
+
+
+@app.route("/add_admin_user", methods=['POST', 'GET'])
+def add_admin_user():
+    """Add admin user into database from registration form."""
+
+    # get new user information
     username = request.form.get('username')
     phone = request.form.get('phone')
     password = request.form.get('password')
 
-    if is_invited:
-        invited_user = User.query.get(int(is_invited))
-        invited_user.username = username
-        invited_user.phone = phone
-        invited_user.password = password
+    # get new house information
+    house_name = request.form.get('house_name')
 
-    else:
-        new_user = User(username=username,
-                        phone=phone,
-                        password=password,
-                        is_admin=True)
-        db.session.add(new_user)
+    new_user = User(username=username,
+                    phone=phone,
+                    password=password,
+                    is_admin=True)
+
+    db.session.add(new_user)
     db.session.commit()
 
 
-    return redirect('/create_house')
+    return redirect('/create_house_pref')
 
-@app.route("/create_house", methods=['GET'])
-def create_house():
-    """Request information to create a new house."""
+@app.route("/create_house_pref", methods=['GET'])
+def create_house_pref():
+    """Scheduling preference where admin user picks chores, invites house members and schedule length."""
 
-    return render_template('create_house.html')
+    chore_objs = Chore.query.all()
 
-@app.route("/invite_housemates", methods=['GET'])
-def invite_housemates():
-    """Request other housemate emails and send emails to invite them to house."""
-
-    return render_template('invite_housemates.html')
-
-@app.route("/create_house_pref_1", methods=['GET'])
-def create_house_pref_1():
-    """Step 1 of 3 for creating house preferences. Step 1 is selecting chores for the household."""
-
-    return render_template('create_house_pref_1.html')
+    return render_template('create_house_pref.html', chore_objs=chore_objs)
 
 @app.route("/create_house_pref_2", methods=['GET'])
 def create_house_pref_2():
@@ -122,13 +111,6 @@ def create_house_pref_2():
     chore chosen in Step 1 in order to set the week frequency and day of week due."""
 
     return render_template('create_house_pref_2.html')
-
-@app.route("/create_house_pref_3", methods=['GET'])
-def create_house_pref_3():
-    """Step 3 of 3 for creating house preferences. Step 3 is a confirmation page of the 
-    house chore options and requests the schedule end date."""
-
-    return render_template('create_house_pref_3.html')
 
 @app.route("/scheduling_algorithm", methods=['GET'])
 def scheduling_algorithm():

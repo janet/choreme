@@ -4,39 +4,35 @@
   <title>Chore Me</title>
   <link rel="shortcut icon" href="http://cdn.flaticon.com/png/256/40629.png" type="image/x-icon">
   <link rel="icon" href="http://cdn.flaticon.com/png/256/40629.png" type="image/x-icon">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 
 <body>
   Chore Me
   
 <!-- If no user logged in, display login button -->
-<!--   {% if session['user_id'] %}
+  {% if session['user_id'] %}
       <form action='/logout' align="right">
             <span>
             <button>Logout</button>
             </span>
       </form>
   
-  {% else %}
-  <form action='/login' align="right">
-        <span>
-        <button>Login</button>
-        </span>
-  </form>
   {% endif %}
   
   <hr>
 
   {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %} -->
+    {% if messages %}
+      <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
 
   {% block content %} put your content here {% endblock %}
 

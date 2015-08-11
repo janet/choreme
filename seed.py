@@ -1,6 +1,6 @@
 """Utility file to seed choreme database with dummy data from seed_data file"""
 
-from model import User, House, Schedule, ScheduleLength, HouseChore, DayOfWeek, WeekFreq, Chore, UserChore
+from model import User, House, HouseChore, Chore, UserChore
 from model import connect_to_db, db
 from server import app
 from datetime import datetime
@@ -28,71 +28,15 @@ def load_houses():
     seed_file = open("seed_data/house")
     for line in seed_file:
         line = line.rstrip()
-        seed_line = line.split(" ")
+        seed_line = line.split("\t")
         
         new_house = House(
-            house_name=seed_line[0]
+            name=seed_line[0],
+            start_date=datetime.strptime(seed_line[1], "%w, %m/%d/%y"),
+            num_weeks=seed_line[2]
             )
         db.session.add(new_house)
     db.session.commit()
-
-def load_schedule():
-    """Load sched from sched into database."""
-    seed_file = open("seed_data/sched")
-    for line in seed_file:
-        line = line.rstrip()
-        seed_line = line.split("\t")
-        
-        new_sched = Schedule(
-            house_id=int(seed_line[0]),
-            start_date=datetime.strptime(seed_line[1], "%w, %m/%d/%y"),
-            end_date=datetime.strptime(seed_line[2], "%w, %m/%d/%y"),
-            schedule_length=int(seed_line[3])
-            )
-        db.session.add(new_sched)
-    db.session.commit()
-
-def load_schedule_length():
-    """Load schedule_length ref table from schedule_length into database."""
-    seed_file = open("seed_data/schedule_length")
-    for line in seed_file:
-        line = line.rstrip()
-        seed_line = line.split("\t")
-        
-        new_sched_len = ScheduleLength(
-            sched_len_value=int(seed_line[0]),
-            sched_len_in_weeks=int(seed_line[1])
-            )
-
-        db.session.add(new_sched_len)
-    db.session.commit()   
-
-def load_day_of_week():
-    """Load day_of_week ref table from day_of_week into database."""
-    seed_file = open("seed_data/day_of_week")
-    for line in seed_file:
-        line = line.rstrip()
-        seed_line = line.split("\t")
-        
-        new_dow = DayOfWeek(
-            dow_name=seed_line[0])
-
-        db.session.add(new_dow)
-    db.session.commit()    
-
-def load_week_freq():
-    """Load week_freq ref table from week_freq into database."""
-    seed_file = open("seed_data/week_freq")
-    for line in seed_file:
-        line = line.rstrip()
-        seed_line = line.split("\t")
-        
-        new_week_freq = WeekFreq(
-            week_freq_name=seed_line[0],
-            week_freq_value=seed_line[1])
-
-        db.session.add(new_week_freq)
-    db.session.commit()    
 
 def load_house_chore():
     """Load house_chore from house_chore into database."""
@@ -102,7 +46,7 @@ def load_house_chore():
         seed_line = line.split("\t")
 
         new_house_chore = HouseChore(
-            schedule_id=int(seed_line[0]),
+            house_id=int(seed_line[0]),
             chore_id=int(seed_line[1]),
             dow=seed_line[2],
             week_freq=seed_line[3]
@@ -118,7 +62,7 @@ def load_chore():
         seed_line = line.split("\t")
         
         new_chore = Chore(
-            chore_name=seed_line[0])
+            name=seed_line[0])
 
         db.session.add(new_chore)
     db.session.commit() 
@@ -132,7 +76,7 @@ def load_user_chore():
         
         new_user_chore = UserChore(
             user_id=int(seed_line[0]),
-            house_chore_id=int(seed_line[1]),
+            chore_id=int(seed_line[1]),
             due_date=datetime.strptime(seed_line[2], "%w, %m/%d/%y"))
 
         db.session.add(new_user_chore)
@@ -150,10 +94,6 @@ if __name__ == "__main__":
 
     load_houses()
     load_users()
-    load_schedule()
-    load_schedule_length()
-    load_day_of_week()
-    load_week_freq()
     load_house_chore()
     load_chore()
     load_user_chore()
