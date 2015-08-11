@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from sqlalchemy.orm.exc import NoResultFound
 from model import connect_to_db, db
 from model import User, House, HouseChore, Chore, UserChore
 from twilio.rest import TwilioRestClient 
@@ -98,10 +99,13 @@ def add_admin_user():
     db.session.add(new_user)
     db.session.commit()
 
+    session['user_id'] = new_user.id
+    flash("session user_id: ", session['user_id'])
+
 
     return redirect('/create_house_pref')
 
-@app.route("/create_house_pref", methods=['GET'])
+@app.route("/create_house_pref", methods=['POST','GET'])
 def create_house_pref():
     """Scheduling preference where admin user picks chores, invites house members and schedule length."""
 
@@ -122,7 +126,7 @@ def temp_save_chore_freq():
 
 
 
-    return jsonify({'chore_name': chore_name, 
+    return jsonify({'chore_name': chore_name,
                     'week_freq': week_freq,
                     'day': day})
 
@@ -153,37 +157,39 @@ def house_pref_view():
 
 @app.route('/process_login', methods=['POST'])
 def process_login():
-    """Process login form: Authenticate user and if new user, add to database"""
+    """Process login form: Authenticate user password and error if incorrect."""
 
-    email_entered = request.form.get("email")
-    password_entered = request.form.get("password")
+    username = request.form.get("username")
+    password = request.form.get("password")
     
     try:
-        user_queried = User.query.filter_by(email=email_entered).one()
-        if user_queried.password != password_entered:
-            flash("Password is incorrect. Please re-enter.")
-            return redirect('/login') #re-enter password
+        user = User.query.filter_by(username=username).one()
+        if user.password != password:
+            flash("Password not recognized. Please re-enter.")
+            return redirect('/') #re-enter password
         else:
-            loggedin_user_id = user_queried.user_id
+            # adding logged in user to session if u/n & p/w match database
+            session['user_id'] = user.id
+            # also add logged in user's house_id to allow easy save of chore freq in house pref
+            session['house_id'] = user.house.id
+            flash("Logged in")
+            flash("user_id: %s house_id: %s" % (session['user_id'], session['house_id']))
+            return redirect('/personal_view')
+
 
     except NoResultFound:
-        new_user = User(
-            email=email_entered,
-            password=password_entered
-        )
+        flash("Username not recognized. Please re-enter or register below.")
+        return redirect('/')
 
-        db.session.add(new_user)
-        db.session.commit()
-        # db.session.flush()
-        loggedin_user_id = new_user.user_id
+@app.route('/logout')
+def logout():
+    """Logout route that redirects to the homepage"""
+    flash("Logged out")
 
-    #adding logged in user to session
-    session['user_id'] = loggedin_user_id 
+    session['user_id'] = None
 
-    #created new user or validated existing user password and redirecting to home
-    flash("Logged in")
-
-    return redirect('/users/' + str(loggedin_user_id)) 
+    return redirect('/')
+   
 
 print "you are awesome"
  

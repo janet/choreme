@@ -7,38 +7,54 @@ function selectChore(evt) {
 		return;
 	}
 	chore.addClass('moved');
+
+	// add click event listener on modal window link that will call a choreModal
 	var choreElement = $('<a>').html(chore.html()).on('click', choreModal);
 	choreElement.attr({
 		href: '#',
 		'data-target': '#myModal',
 		'data-toggle': 'modal',
-		id: chore.html()
 	});
 	$("#chore-selected").append(choreElement);
-	$("#chore-selected-inputs").append('<input type="text" name="chores" value="' + chore.html() + '">');
+
+	var hiddenChoreInput = $('<input>').attr({
+		name: 'chores',
+		id: chore.html(),
+		value: chore.html()
+	});
+	$("#chore-selected-inputs").append(hiddenChoreInput);
 }
 
 
 $("#chore-potentials li").on('click', selectChore);
 
 function choreModal(evt) {
-	// function to create modal window for each chore that is selected
+	// function to populate modal window with that chore specific data
 
 	var selectedChore = $(evt.target); // the <a> tag
 	var modal = $('#myModalLabel');
 
-	var hidden_chore_input = $('#hidden-chore')
+	var hidden_modal_input = $('#hidden-modal-chore')
 
-	hidden_chore_input.val(selectedChore.html()); // set hidden modal window input to the chore name
+	hidden_modal_input.val(selectedChore.html()); // set hidden modal window input to the chore name
 	modal.html(selectedChore.html()); // set modal window title to chore name
 }
 
-function setChoreFreq(evt) {
+function passChoreFreq(evt) {
 	evt.preventDefault();
+	$('#myModal').modal('hide')
 
+	// get the chore name from the modal window hidden input
+	var hiddenModalChore = $('#hidden-modal-chore').val();
+
+	// ajax send modal window form to main form
 	$.post("/save_chore_freq",
 		$('#chore-freq-form').serialize(),
 		function(result) {
-			$('')
+			$('#'+hiddenModalChore).val(
+				result.chore_name + '|' + result.week_freq + '|' + result.day)
 		})
 }
+
+
+$("#chore-freq-form").on('submit', passChoreFreq);

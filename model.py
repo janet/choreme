@@ -113,6 +113,7 @@ def connect_to_db(app):
 
     # Configure to use our SQLite database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///choreme.db'
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     # app.config['SQLALCHEMY_RECORD_QUERIES'] = True
     db.app = app
     db.init_app(app)
