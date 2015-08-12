@@ -126,10 +126,11 @@ def temp_save_chore_freq():
                     'week_freq': week_freq,
                     'day': day})
 
-@app.route("/scheduling_algorithm", methods=['GET'])
+@app.route("/scheduling_algorithm", methods=['POST'])
 def scheduling_algorithm():
     """This route assigns chores to users based on the house preferences inputted and 
     redirects to calendar_view"""
+
 
     return redirect('/calendar_view')
 

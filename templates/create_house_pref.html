@@ -5,7 +5,7 @@
 
 
 
-<form action="/scheduling_algorithm">
+<form action="/scheduling_algorithm" method="POST">
     <h3>Add Your House</h3>
     	House Name: 
     	<input type="text" name="house_name" placeholder="Monkey House" required><br>
@@ -14,6 +14,8 @@
     <h4>House Members:</h4>
     	Admin Phone: 
     	<input type="text" name="admin-phone" placeholder="+15105551234"><br>
+    	<div id="phone-inputs"></div>
+    	<button id="add-phone-button" name="add-phone-button">add Housemate</button>
     <br>
 
     <h3>Choose Your Chores</h3>

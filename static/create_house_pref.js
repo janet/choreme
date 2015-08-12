@@ -43,6 +43,8 @@ function choreModal(evt) {
 
 function passChoreFreq(evt) {
 	evt.preventDefault();
+
+	// close the modal window
 	$('#myModal').modal('hide')
 
 	// get the chore name from the modal window hidden input
@@ -56,7 +58,7 @@ function passChoreFreq(evt) {
 				result.chore_name + '|' + result.week_freq + '|' + result.day)
 		})
 
-	// ajax send modal window form to maind form
+	// ajax send modal window form to main form
 	$.post("/pass_chore_freq",
 		$('#chore-freq-form').serialize(),
 		function(result) {
@@ -65,5 +67,24 @@ function passChoreFreq(evt) {
 		})
 }
 
-
 $("#chore-freq-form").on('submit', passChoreFreq);
+
+
+function addPhone(evt) {
+	//function to add a phone number input
+
+	//prevent any form submission
+	evt.preventDefault();
+
+	//create new input element for a housemate phone number
+	var new_phone_input = $('<input>').attr({
+		name: 'phones',
+		placeholder: '+15105551234',
+		type: 'text'
+	});
+
+	//add the new input element to the div right below admin phone
+	$('#phone-inputs').append(new_phone_input)
+}
+
+$("#add-phone-button").on('click', addPhone)
