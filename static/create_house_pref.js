@@ -25,6 +25,7 @@ function addPhone(evt) {
 }
 
 function removePhone(evt) {
+	// remove phone input
 	evt.preventDefault();
 
 	var rPButton = $(this); // the remove <button> element
@@ -32,7 +33,7 @@ function removePhone(evt) {
 	var remove_phone_input_text = remove_phone_input.prev(); // the text we want to remove
 	var remove_br = rPButton.next(); // the break after each phone input line
 
-	//remove it when remove button is clicked
+	// remove it when remove button is clicked
 	remove_phone_input.remove();
 	remove_phone_input_text.remove();
 	rPButton.remove();
@@ -40,7 +41,10 @@ function removePhone(evt) {
 
 }
 
+// event listener for add phone button to create a new input field
 $("#add-phone-button").on('click', addPhone)
+
+
 function selectChore(evt) {
 	// function to add chore-potential elements to the chore-selected table with a modal link
 	var chore = $(evt.target);
@@ -48,8 +52,9 @@ function selectChore(evt) {
 	// if we've already moved this to being selected, don't do it again
 	if (chore.hasClass('moved')) {
 		return;
-	}
+	};
 	chore.addClass('moved');
+	chore.attr('name', chore.html())
 
 	// add click event listener on modal window link that will call a choreModal
 	var choreElement = $('<a>').html(chore.html()).on('click', choreModal);
@@ -61,6 +66,11 @@ function selectChore(evt) {
 	});
 	$("#chore-selected").append($('<li>').html(choreElement));
 
+	// add remove button for chore selected
+	var liElement = $("#"+chore.html()).parent() // get li element of chore
+	
+	liElement.append($('<button>').attr('name', 'remove_chore_button').html("Remove").on('click', removeChore))
+
 	var hiddenChoreInput = $('<input>').attr({
 		name: 'chores',
 		id: 'hidden'+chore.html(),
@@ -69,7 +79,7 @@ function selectChore(evt) {
 	$("#chore-selected-inputs").append(hiddenChoreInput);
 }
 
-
+// event listener for when user clicks on select from chores table
 $("#chore-potentials li").on('click', selectChore);
 
 function choreModal(evt) {
@@ -86,6 +96,7 @@ function choreModal(evt) {
 }
 
 function passChoreFreq(evt) {
+	// passes chore frequency data from the modal window to the main form page
 	evt.preventDefault();
 
 	// close the modal window
@@ -111,5 +122,27 @@ function passChoreFreq(evt) {
 		})
 }
 
+// event listener for when user submits modal window changes
 $("#chore-freq-form").on('submit', passChoreFreq);
+
+function removeChore(evt) {
+	// removes chore from selected chores
+	evt.preventDefault();
+
+	var rCButton = $(this); // the remove <button> element
+	var chore_a_tag = rCButton.prev() //this is the a tag 
+	var rCChore = chore_a_tag.attr('id') // this is the name of the chore
+	var remove_chore = chore_a_tag.parent(); // the li chore tag we want to remove
+	var remove_hidden_chore = $('#hidden'+rCChore) //the hidden input tag
+
+	// remove it when remove button is clicked
+	rCButton.remove();
+	remove_chore.remove();
+	remove_hidden_chore.remove();
+
+	// remove the styling on previously selected chores in chore-potentials
+	var changedChorePotential = $("[name|='"+rCChore+"']")
+	console.log(changedChorePotential)
+	changedChorePotential.removeClass('moved')
+}
 
