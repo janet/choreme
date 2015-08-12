@@ -11,8 +11,33 @@ function addPhone(evt) {
 		type: 'text'
 	});
 
+	//create new button element to remove phones and put an eventlistener on it
+	var remove_phone_button = $('<button>').attr('name', 'remove_phone_button').html("Remove").on('click', removePhone)
+
+	//add the new input element to the div right below admin phone
+	$('#phone-inputs').append($('<span>').html('Housemate phone: '))
 	//add the new input element to the div right below admin phone
 	$('#phone-inputs').append(new_phone_input)
+	//add the remove button next to the new phone input
+	$('#phone-inputs').append(remove_phone_button)
+	//add a break after each phone input
+	$('#phone-inputs').append($('<br>'))
+}
+
+function removePhone(evt) {
+	evt.preventDefault();
+
+	var rPButton = $(this); // the remove <button> element
+	var remove_phone_input = rPButton.prev(); // the input field we wnat to remove
+	var remove_phone_input_text = remove_phone_input.prev(); // the text we want to remove
+	var remove_br = rPButton.next(); // the break after each phone input line
+
+	//remove it when remove button is clicked
+	remove_phone_input.remove();
+	remove_phone_input_text.remove();
+	rPButton.remove();
+	remove_br.remove();
+
 }
 
 $("#add-phone-button").on('click', addPhone)
