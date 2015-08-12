@@ -113,7 +113,7 @@ def create_house_pref():
 
     return render_template('create_house_pref.html', chore_objs=chore_objs)
 
-@app.route("/save_chore_freq", methods=['POST'])
+@app.route("/pass_chore_freq", methods=['POST'])
 def temp_save_chore_freq():
     """Pass chore frequency from modal window form to create_house_pref on modal window
     save."""
@@ -121,10 +121,6 @@ def temp_save_chore_freq():
     chore_name = request.form.get('chore')
     week_freq = request.form.get('week_freq')
     day = request.form.get('day')
-
-
-
-
 
     return jsonify({'chore_name': chore_name,
                     'week_freq': week_freq,
