@@ -1,27 +1,30 @@
 function addPhone(evt) {
-	//function to add a phone number input
+	// function to add a phone number input
 
-	//prevent any form submission
+	// prevent any form submission
 	evt.preventDefault();
 
-	//create new input element for a housemate phone number
+	// create new input element for a housemate phone number
 	var new_phone_input = $('<input>').attr({
 		name: 'phones',
 		placeholder: '+15105551234',
 		type: 'text'
 	});
 
-	//create new button element to remove phones and put an eventlistener on it
+	// create new button element to remove phones and put an eventlistener on it
 	var remove_phone_button = $('<button>').attr('name', 'remove_phone_button').html("Remove").on('click', removePhone)
 
-	//add the new input element to the div right below admin phone
+	// add the new input element to the div right below admin phone
 	$('#phone-inputs').append($('<span>').html('Housemate phone: '))
-	//add the new input element to the div right below admin phone
+	// add the new input element to the div right below admin phone
 	$('#phone-inputs').append(new_phone_input)
-	//add the remove button next to the new phone input
+	// add the remove button next to the new phone input
 	$('#phone-inputs').append(remove_phone_button)
-	//add a break after each phone input
+	// add a break after each phone input
 	$('#phone-inputs').append($('<br>'))
+
+	// count number of housemates and put in hidden input
+	$('#housemate_count').val($('#phone-inputs span').length)
 }
 
 function removePhone(evt) {
@@ -39,10 +42,20 @@ function removePhone(evt) {
 	rPButton.remove();
 	remove_br.remove();
 
+	// re-count number of housemates and put in hidden input
+	$('#housemate_count').val($('#phone-inputs span').length)
 }
 
 // event listener for add phone button to create a new input field
 $("#add-phone-button").on('click', addPhone)
+
+// function phoneCounter(evt) {
+// 	// function to count number of housemates in addition to admin
+
+
+
+// $('#addMe').on('click', phoneCounter);
+
 
 
 function selectChore(evt) {
@@ -140,9 +153,8 @@ function removeChore(evt) {
 	remove_chore.remove();
 	remove_hidden_chore.remove();
 
-	// remove the styling on previously selected chores in chore-potentials
+	// remove the styling on previously selected chores in chore-potentials and allow for re-select
 	var changedChorePotential = $("[name|='"+rCChore+"']")
-	console.log(changedChorePotential)
 	changedChorePotential.removeClass('moved')
-}
+};
 

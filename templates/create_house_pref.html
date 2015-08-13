@@ -13,9 +13,10 @@
 
     <h3>House Members:</h3>
     	Admin Phone: 
-    	<input type="text" name="admin-phone" placeholder="+15105551234"><br>
+    	<input type="text" name="admin_phone" placeholder="+15105551234"><br>
     	<div id="phone-inputs"></div>
     	<button id="add-phone-button" name="add-phone-button">add Housemate</button>
+    	<br>Housemate Count<input type="text" name="housemate_count" id="housemate_count">
     <br>
 
     <h3>Choose Your Chores</h3>
@@ -31,15 +32,16 @@
 				<!-- chores go here -->
 			</ul>
 
+	<!-- div that is filled by clicks to the chore-potentials table with frequencies set by modal window -->
 	<div id="chore-selected-inputs"></div>
 
 	<br>Please select a frequency for each chore<br>
 
 	<br>
 		Schedule out for: 
-			<input type="number" min="1" max="52" name="num_weeks" required>
-				weeks<br>
-			<input type="submit" value="CHORE ME">
+		<input type="number" min="1" max="52" name="num_weeks" required>
+			weeks<br>
+		<input type="submit" value="CHORE ME">
 </form>
 
 
@@ -86,6 +88,10 @@
     </div>
   </div>
 </div>
+
+<div id="addMe">addMe</div>
+<div id="theCount"></div>
+
 
 <script src="/static/create_house_pref.js"></script>
 

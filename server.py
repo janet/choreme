@@ -17,16 +17,16 @@ app.secret_key = "ABC"
 ############################################################################## 
  
 # Twilio
-ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
-AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN'] 
+TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
+TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN'] 
  
-client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
+client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN) 
 
-my_phone_number = os.environ['MY_PHONE_NUMBER']
+MY_PHONE_NUMBER = os.environ['MY_PHONE_NUMBER']
  
 # adding specific numbers for personalized response
 callers = {
-   my_phone_number : "you are the best programmer", 
+   MY_PHONE_NUMBER : "you are the best programmer", 
 }
 
 # my twilio phone number
@@ -58,9 +58,10 @@ def hello_monkey():
 def login():
     """Index route will be a login page requesting username and password"""
     
-    if session["user_id"]:
+    try:
+        session["user_id"]
         return redirect("/calendar_view")
-    else:
+    except KeyError:
         session["user_id"] = None
         return render_template("login.html")
 
@@ -131,6 +132,11 @@ def scheduling_algorithm():
     """This route assigns chores to users based on the house preferences inputted and 
     redirects to calendar_view"""
 
+    house_name = request.form.get('house_name')
+    admin_phone = request.form.get('admin_phone')
+    hm_phone_list = request.form.get('phones')
+
+    print "house_name: %s, admin_phone: %s, hm_phone_list: %s" % (house_name, admin_phone, hm_phone_list)
 
     return redirect('/calendar_view')
 
