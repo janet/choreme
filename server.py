@@ -134,9 +134,27 @@ def scheduling_algorithm():
 
     house_name = request.form.get('house_name')
     admin_phone = request.form.get('admin_phone')
-    hm_phone_list = request.form.get('phones')
+    housemate_count = int(request.form.get('housemate_count'))
+    num_weeks = request.form.get('num_weeks')
 
-    print "house_name: %s, admin_phone: %s, hm_phone_list: %s" % (house_name, admin_phone, hm_phone_list)
+    # add new user with phone number
+    for i in range(housemate_count):
+        housemate_input_name = "housemate_phone" + str(i+1)
+        print housemate_input_name
+        try:
+            request.form.get(housemate_input_name)
+            housemate_phone = request.form.get(housemate_input_name)
+            if housemate_phone is not None:
+                new_user = User(phone=housemate_phone)
+                db.session.add(new_user)
+                db.session.commit()
+        except:
+            pass
+
+    #create new 
+
+
+    # print "house_name: %s, admin_phone: %s, hm_phone_list: %s" % (house_name, admin_phone, hm_phone_list)
 
     return redirect('/calendar_view')
 

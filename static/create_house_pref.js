@@ -4,9 +4,13 @@ function addPhone(evt) {
 	// prevent any form submission
 	evt.preventDefault();
 
+	// create housemate count to add to ids and input names
+	var housemate_count = ($('#phone-inputs span').length +1)
+
 	// create new input element for a housemate phone number
 	var new_phone_input = $('<input>').attr({
-		name: 'phones',
+		name: 'housemate_phone' + +housemate_count,
+		id: 'housemate_phone' + +housemate_count,
 		placeholder: '+15105551234',
 		type: 'text'
 	});
@@ -15,7 +19,7 @@ function addPhone(evt) {
 	var remove_phone_button = $('<button>').attr('name', 'remove_phone_button').html("Remove").on('click', removePhone)
 
 	// add the new input element to the div right below admin phone
-	$('#phone-inputs').append($('<span>').html('Housemate phone: '))
+	$('#phone-inputs').append($('<span>').html('Housemate #' + +housemate_count + ' : '))
 	// add the new input element to the div right below admin phone
 	$('#phone-inputs').append(new_phone_input)
 	// add the remove button next to the new phone input
@@ -36,27 +40,32 @@ function removePhone(evt) {
 	var remove_phone_input_text = remove_phone_input.prev(); // the text we want to remove
 	var remove_br = rPButton.next(); // the break after each phone input line
 
+	// // re-calculate housemate numbering in the ui and input field names
+	// if (rPButton.next().prop('tagName') === 'BR') {
+
+	// 	var prev_count = $('#phone-inputs span').length
+
+	// 	alert("this is the number of inputs: " + +prev_count)
+	// 	// for each span after rPButton:
+	// 	// 	update span_s housemate_count
+	// 	// for each input after rPButton:
+	// 	// 	update input name
+	// }
+
 	// remove it when remove button is clicked
 	remove_phone_input.remove();
 	remove_phone_input_text.remove();
 	rPButton.remove();
 	remove_br.remove();
 
+
+
 	// re-count number of housemates and put in hidden input
-	$('#housemate_count').val($('#phone-inputs span').length)
+	// $('#housemate_count').val($('#phone-inputs span').length)
 }
 
 // event listener for add phone button to create a new input field
 $("#add-phone-button").on('click', addPhone)
-
-// function phoneCounter(evt) {
-// 	// function to count number of housemates in addition to admin
-
-
-
-// $('#addMe').on('click', phoneCounter);
-
-
 
 function selectChore(evt) {
 	// function to add chore-potential elements to the chore-selected table with a modal link
