@@ -141,7 +141,9 @@ def scheduling_algorithm():
     house_name = request.form.get('house_name')
     admin_phone = request.form.get('admin_phone')
     housemate_count = int(request.form.get('housemate_count'))
+    housechore_count = int(request.form.get('hidden_count_of_chores'))
     num_weeks = request.form.get('num_weeks')
+
 
     # create new house with house name
     new_house = House(name=house_name, num_weeks=num_weeks)
@@ -151,15 +153,13 @@ def scheduling_algorithm():
     # add the house id to the session and to the admin user
     house_id = House.query.filter(House.name==house_name).one().id
     session['house_id'] = house_id
-    print session['user_id']
 
     admin_user = User.query.get(session['user_id'])
     admin_user.house_id = house_id
 
-    # add new user with phone number
+    # create new user with phone number
     for i in range(housemate_count):
         housemate_input_name = "housemate_phone" + str(i+1)
-        print housemate_input_name
         try:
             request.form.get(housemate_input_name)
             housemate_phone = request.form.get(housemate_input_name)
@@ -171,10 +171,25 @@ def scheduling_algorithm():
         except:
             pass
 
-    #create new 
+    # create new house chore
+    for i in range(housechore_count):
+        housechore_input_name = "chores" + str(i+1)
+        try:
+            request.form.get(housechore_input_name)
+            housechore_input = request.form.get(housechore_input_name)
+            if housechore_input is not None:
+                chore, week_freq, day = housechore_input.split('|')
+                chore_id = Chore.query.filter(Chore.name==chore).one().id
+                new_housechore = HouseChore(house_id=house_id,
+                                            chore_id=chore_id,
+                                            day=day,
+                                            week_freq=int(week_freq)
+                                            )
+                db.session.add(new_housechore)
+                db.session.commit()
+        except:
+            pass
 
-
-    # print "house_name: %s, admin_phone: %s, hm_phone_list: %s" % (house_name, admin_phone, hm_phone_list)
 
     return redirect('/calendar_view')
 

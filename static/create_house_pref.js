@@ -12,14 +12,15 @@ function addPhone(evt) {
 		name: 'housemate_phone' + +housemate_count,
 		id: 'housemate_phone' + +housemate_count,
 		placeholder: '+15105551234',
-		type: 'text'
+		type: 'text',
+		required: true
 	});
 
 	// create new button element to remove phones and put an eventlistener on it
 	var remove_phone_button = $('<button>').attr('name', 'remove_phone_button').html("Remove").on('click', removePhone)
 
 	// add the new input element to the div right below admin phone
-	$('#phone-inputs').append($('<span>').html('Housemate #' + +housemate_count + ' : '))
+	$('#phone-inputs').append($('<span>').html('Housemate phone: '))
 	// add the new input element to the div right below admin phone
 	$('#phone-inputs').append(new_phone_input)
 	// add the remove button next to the new phone input
@@ -88,17 +89,22 @@ function selectChore(evt) {
 	});
 	$("#chore-selected").append($('<li>').html(choreElement));
 
-	// add remove button for chore selected
+	// created remove button for chore selected
 	var liElement = $("#"+chore.html()).parent() // get li element of chore
 	
 	liElement.append($('<button>').attr('name', 'remove_chore_button').html("Remove").on('click', removeChore))
 
+	// count the number of chore selected inputs 
+	var hiddenChoreInput_count = ($('#chore-selected-inputs input').length +1)
+
 	var hiddenChoreInput = $('<input>').attr({
-		name: 'chores',
+		name: 'chores' + +hiddenChoreInput_count,
 		id: 'hidden'+chore.html(),
 		value: chore.html()
 	});
 	$("#chore-selected-inputs").append(hiddenChoreInput);
+
+	$("#hidden_count_of_chores").val(hiddenChoreInput_count)
 }
 
 // event listener for when user clicks on select from chores table
