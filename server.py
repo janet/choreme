@@ -152,7 +152,8 @@ def scheduling_algorithm():
     db.session.commit()
 
     # add the house id to the session and to the admin user
-    house_id = House.query.filter(House.name==house_name).one().id
+    house = House.query.filter(House.name==house_name).one()
+    house_id = house.id
     session['house_id'] = house_id
 
     admin_user = User.query.get(session['user_id'])
@@ -195,22 +196,46 @@ def scheduling_algorithm():
     # create new user chores
 
     # get the date from the housechore and determine the actual start date
-    init_sched_date = House.query.get(house_id).start_date
+    init_sched_date = house.start_date
     init_sched_date_day = datetime.datetime.strftime(init_sched_date,"%A")
 
-    for house_chore in House.query.get(house_id).house_chores:
-        print "house_chore.day: %s, type: %s" % (house_chore, type(house_chore))
-        print "init_sched_date_day: %s type: %s" % (init_sched_date_day, type(init_sched_date_day))
-        if init_sched_date_day == house_chore.day:
-            print "house_chore.day == init_sched_date_day"
-        else:
-            print "house_chore.day != init_sched_date_day"
+    housemates_list = House.query.get(house_id).users
+    num_housemates = len(housemates_list)
 
-    for house_chore in House.query.get(house_id).house_chores:
-        while datetime.datetime.strftime(init_sched_date,"%A") != house_chore.day:
+    for index, house_chore in enumerate(house.house_chores):
+        print "index: %s, house_chore: %s" % (index, house_chore)
+
+        # while schedule start day (ie Sunday) != house chore day
+        while datetime.datetime.strftime(init_sched_date,"%A") != house_chore.day: 
             init_sched_date += datetime.timedelta(days=1)
-            print "init_sched_date: %s, house_chore.day: %s" % (datetime.datetime.strftime(init_sched_date, "%A"), house_chore.day)
-        print "yeee: init_sched_date: %s, house_chore.day: %s" % (datetime.datetime.strftime(init_sched_date, "%A"), house_chore.day)
+
+        # this is the first occurence of the chore
+        first_sched_date = init_sched_date
+        print "first_sched_date = ", first_sched_date
+
+        print "int(house.num_weeks)", int(house.num_weeks)
+        print "int(house_chore.week_freq)", int(house_chore.week_freq)
+
+        # create user chores for each occurrence
+        for i in range(int(house.num_weeks) / int(house_chore.week_freq)):
+            due_date = first_sched_date + datetime.timedelta(days=((i)*(int(house_chore.week_freq)*7)))
+            print "due date: %s", due_date.strftime("%w, %m/%d/%y")
+
+            housemate = housemates_list[(index + i) % num_housemates]
+            print "housemate: ", housemate
+
+            print "user_id: %s, chore_id: %s, due_date: %s" % (housemate.id, house_chore.chore.id, due_date.strftime("%w, %m/%d/%y"))
+
+            new_userchore = UserChore(user_id=housemate.id, 
+                                        chore_id=house_chore.chore.id,
+                                        due_date=due_date)
+
+            db.session.add(new_userchore)
+            db.session.commit()
+
+
+
+
 
 
 
@@ -269,6 +294,7 @@ def logout():
     flash("Logged out")
 
     session['user_id'] = None
+    session['house_id'] = None
 
     return redirect('/')
    
