@@ -61,7 +61,7 @@ class HouseChore(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return "<HouseChore house_chore_id=%s dow=%s week_freq=%s>" % (self.id, self.dow, self.week_freq)
+        return "<HouseChore house_chore_id=%s day=%s week_freq=%s>" % (self.id, self.day, self.week_freq)
 
 class Chore(db.Model):
     """Generic chore object"""

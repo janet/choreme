@@ -1,3 +1,4 @@
+import datetime
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.orm.exc import NoResultFound
@@ -189,6 +190,31 @@ def scheduling_algorithm():
                 db.session.commit()
         except:
             pass
+
+
+    # create new user chores
+
+    # get the date from the housechore and determine the actual start date
+    init_sched_date = House.query.get(house_id).start_date
+    init_sched_date_day = datetime.datetime.strftime(init_sched_date,"%A")
+
+    for house_chore in House.query.get(house_id).house_chores:
+        print "house_chore.day: %s, type: %s" % (house_chore, type(house_chore))
+        print "init_sched_date_day: %s type: %s" % (init_sched_date_day, type(init_sched_date_day))
+        if init_sched_date_day == house_chore.day:
+            print "house_chore.day == init_sched_date_day"
+        else:
+            print "house_chore.day != init_sched_date_day"
+
+    for house_chore in House.query.get(house_id).house_chores:
+        while datetime.datetime.strftime(init_sched_date,"%A") != house_chore.day:
+            init_sched_date += datetime.timedelta(days=1)
+            print "init_sched_date: %s, house_chore.day: %s" % (datetime.datetime.strftime(init_sched_date, "%A"), house_chore.day)
+        print "yeee: init_sched_date: %s, house_chore.day: %s" % (datetime.datetime.strftime(init_sched_date, "%A"), house_chore.day)
+
+
+
+
 
 
     return redirect('/calendar_view')
