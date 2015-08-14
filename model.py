@@ -33,7 +33,7 @@ class House(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(64), nullable=False, unique=True)
-    start_date = db.Column(db.DateTime, nullable=False)
+    start_date = db.Column(db.DateTime, nullable=False, default=datetime.now()) 
     num_weeks = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):

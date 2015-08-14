@@ -60,6 +60,8 @@ def login():
     
     try:
         session["user_id"]
+        if session["user_id"] is None:
+            return render_template("login.html")
         return redirect("/calendar_view")
     except KeyError:
         session["user_id"] = None
@@ -100,7 +102,11 @@ def add_admin_user():
     db.session.add(new_user)
     db.session.commit()
 
-    session['user_id'] = new_user.id
+    admin_user_id = User.query.filter(User.username==username).one().id
+    print admin_user_id
+
+    session['user_id'] = admin_user_id
+    print session['user_id']
     flash("session user_id: ", session['user_id'])
 
 
@@ -137,6 +143,19 @@ def scheduling_algorithm():
     housemate_count = int(request.form.get('housemate_count'))
     num_weeks = request.form.get('num_weeks')
 
+    # create new house with house name
+    new_house = House(name=house_name, num_weeks=num_weeks)
+    db.session.add(new_house)
+    db.session.commit()
+
+    # add the house id to the session and to the admin user
+    house_id = House.query.filter(House.name==house_name).one().id
+    session['house_id'] = house_id
+    print session['user_id']
+
+    admin_user = User.query.get(session['user_id'])
+    admin_user.house_id = house_id
+
     # add new user with phone number
     for i in range(housemate_count):
         housemate_input_name = "housemate_phone" + str(i+1)
@@ -145,7 +164,8 @@ def scheduling_algorithm():
             request.form.get(housemate_input_name)
             housemate_phone = request.form.get(housemate_input_name)
             if housemate_phone is not None:
-                new_user = User(phone=housemate_phone)
+                new_user = User(phone=housemate_phone,
+                                house_id=house_id)
                 db.session.add(new_user)
                 db.session.commit()
         except:
