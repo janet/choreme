@@ -122,7 +122,7 @@ def create_house_pref():
     return render_template('create_house_pref.html', chore_objs=chore_objs)
 
 @app.route("/pass_chore_freq", methods=['POST'])
-def temp_save_chore_freq():
+def pass_chore_freq():
     """Pass chore frequency from modal window form to create_house_pref on modal window
     save."""
     
@@ -134,8 +134,8 @@ def temp_save_chore_freq():
                     'week_freq': week_freq,
                     'day': day})
 
-@app.route("/scheduling_algorithm", methods=['POST'])
-def scheduling_algorithm():
+@app.route("/create_user_chores", methods=['POST'])
+def create_user_chores():
     """This route assigns chores to users based on the house preferences inputted and 
     redirects to calendar_view"""
 
@@ -195,10 +195,11 @@ def scheduling_algorithm():
 
     # create new user chores
 
-    # get the date from the housechore and determine the actual start date
+    # get the date from the house and determine the actual start date
     init_sched_date = house.start_date
     init_sched_date_day = datetime.datetime.strftime(init_sched_date,"%A")
 
+    # create a list of housemates and count the number to assign out to them
     housemates_list = House.query.get(house_id).users
     num_housemates = len(housemates_list)
 
@@ -219,12 +220,11 @@ def scheduling_algorithm():
         # create user chores for each occurrence
         for i in range(int(house.num_weeks) / int(house_chore.week_freq)):
             due_date = first_sched_date + datetime.timedelta(days=((i)*(int(house_chore.week_freq)*7)))
-            print "due date: %s", due_date.strftime("%w, %m/%d/%y")
 
             housemate = housemates_list[(index + i) % num_housemates]
-            print "housemate: ", housemate
+            print "HOUSEMATE: ", housemate
 
-            print "user_id: %s, chore_id: %s, due_date: %s" % (housemate.id, house_chore.chore.id, due_date.strftime("%w, %m/%d/%y"))
+            print "user_id: %s, chore_id: %s, due_date: %s" % (housemate.id, house_chore.chore.id, due_date.strftime("%A, %m/%d/%y"))
 
             new_userchore = UserChore(user_id=housemate.id, 
                                         chore_id=house_chore.chore.id,
@@ -232,14 +232,6 @@ def scheduling_algorithm():
 
             db.session.add(new_userchore)
             db.session.commit()
-
-
-
-
-
-
-
-
 
 
     return redirect('/calendar_view')
