@@ -197,12 +197,12 @@ def create_user_chores():
 
     # get the date from the house and determine the actual start date
     init_sched_date = house.start_date
-    init_sched_date_day = datetime.datetime.strftime(init_sched_date,"%A")
 
     # create a list of housemates and count the number to assign out to them
     housemates_list = House.query.get(house_id).users
     num_housemates = len(housemates_list)
 
+    # use enumerate to create an index for each house chore that allows for easy assignment
     for index, house_chore in enumerate(house.house_chores):
         print "index: %s, house_chore: %s" % (index, house_chore)
 
@@ -233,8 +233,7 @@ def create_user_chores():
             db.session.add(new_userchore)
             db.session.commit()
 
-
-    return redirect('/calendar_view')
+    return render_template('calendar_view.html')
 
 @app.route("/calendar_view", methods=['GET'])
 def calendar_view():
@@ -242,11 +241,42 @@ def calendar_view():
 
     return render_template('calendar_view.html')
 
+@app.route("/render_house_chores", methods=['POST'])
+def render_house_chores():
+    """Returns house chores through ajax call from calendar_view"""
+
+    house = House.query.get(session['house_id']) 
+
+    user_chores_dict = {}
+    for user in house.users:
+        for user_chore in user.user_chores:
+            if user_chore.due_date.strftime("%m/%d/%y") in user_chores_dict:
+                user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")].append((user_chore.chore.name, user_chore.user.username, user_chore.is_done))
+            else:
+                user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")] = [(user_chore.chore.name, user_chore.user.username, user_chore.is_done)]
+
+    return jsonify(user_chores_dict)
+
 @app.route("/personal_view", methods=['GET'])
 def personal_view():
     """Renders the personal task list view of the user's assigned chores."""
 
     return render_template('personal_view.html')
+
+@app.route("/render_personal_chores", methods=['POST'])
+def render_personal_chores():
+    """Returns personal chores through ajax call from personal_view"""
+
+    user = User.query.get(session['user_id']) 
+
+    user_chores_dict = {}
+    for user_chore in user.user_chores:
+        if user_chore.due_date.strftime("%m/%d/%y") in user_chores_dict:
+            user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")].append((user_chore.chore.name, user_chore.is_done))
+        else:
+            user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")] = [(user_chore.chore.name, user_chore.is_done)]
+    print user_chores_dict
+    return jsonify(user_chores_dict)
 
 @app.route("/house_pref_view", methods=['GET'])
 def house_pref_view():
