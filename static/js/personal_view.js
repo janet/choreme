@@ -4,7 +4,21 @@ $(document).ready(function() {
 
 		for (var user_chore in result) {
 			console.log(result[user_chore])
-			$('#personal_chores').append($('<li>').html(user_chore + ': ' + result[user_chore][0] + ': ' + result[user_chore][1]));
+
+			var pc_count = ($('#personal_chores li').length +1)
+			
+			$('#personal_chores').append($('<li>').html(
+				user_chore + ': ' + 
+				result[user_chore][0] + ': ' + 
+				result[user_chore][1]
+			));
+
+			$('#personal_chores').append($('<input>').attr({
+				name: 'pc' + +pc_count,
+				id: 'pc' + +result[user_chore][2], // this is the user_chore.id
+				type: 'checkbox',
+				value: result[user_chore][2]
+			}));
 		}
 	});
 });

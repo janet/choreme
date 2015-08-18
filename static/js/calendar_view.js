@@ -7,9 +7,12 @@ $(document).ready(function() {
 			console.log("result[user_chore_date]: " + result[user_chore_date]);
 			$('#user_chores').append($('<li>').html(user_chore_date));
 			for (var user_chore in result[user_chore_date]) {
-				$('#user_chores').append($('<ul>').html($('<li>').html(result[user_chore_date][user_chore])));
-				console.log("result[user_chore_date][user_chore]: " + result[user_chore_date][user_chore]) 
-				// result[user_chore_date][user_chore] is each chore tuple (chore name, username, is_done)
+				$('#user_chores').append($('<ul>').html(
+					$('<li>').html(
+						result[user_chore_date][user_chore].slice(0,3)))); 
+				console.log("result[user_chore_date][user_chore][3]: " + result[user_chore_date][user_chore][3]) // returns id
+				console.log(result[user_chore_date][user_chore].keys())
+				// result[user_chore_date][user_chore] is each chore tuple (chore name, username, is_done, id)
 			}
 		};
 	});
