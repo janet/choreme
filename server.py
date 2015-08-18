@@ -294,10 +294,12 @@ def render_personal_chores():
 def chore_done():
     """When chore is completed in personal view, update the database."""
 
-    result = request.form.get("hidden_personal_chore_input")
-    print result
+    user_chore_id = request.form.get("hidden_personal_chore_input")
+    user_chore = UserChore.query.get(user_chore_id)
+    user_chore.is_done = True
+    db.session.commit()
 
-    return jsonify({"result": result})
+    return jsonify({"result": user_chore_id})
 
 
 
@@ -305,10 +307,12 @@ def chore_done():
 def chore_undone():
     """When chore is unchecked in personal view, update the database."""
 
-    result = request.form.get("hidden_personal_chore_input")
-    print result
+    user_chore_id = request.form.get("hidden_personal_chore_input")
+    user_chore = UserChore.query.get(user_chore_id)
+    user_chore.is_done = False
+    db.session.commit()
 
-    return jsonify({"result": result})
+    return jsonify({"result": user_chore_id})
 
 
 
