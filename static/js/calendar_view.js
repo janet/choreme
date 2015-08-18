@@ -10,8 +10,9 @@ $(document).ready(function() {
 				$('#user_chores').append($('<ul>').html(
 					$('<li>').html(
 						result[user_chore_date][user_chore].slice(0,3)))); 
+				console.log("result[user_chore_date][user_chore].slice(0,3): " + result[user_chore_date][user_chore].slice(0,3))
+				// for some reason is not displaying when 'false', fix this
 				console.log("result[user_chore_date][user_chore][3]: " + result[user_chore_date][user_chore][3]) // returns id
-				console.log(result[user_chore_date][user_chore].keys())
 				// result[user_chore_date][user_chore] is each chore tuple (chore name, username, is_done, id)
 			}
 		};

@@ -55,6 +55,7 @@ def hello_monkey():
  
     return str(resp)
 
+
 @app.route("/", methods=['GET'])
 def login():
     """Index route will be a login page requesting username and password"""
@@ -68,11 +69,13 @@ def login():
         session["user_id"] = None
         return render_template("login.html")
 
+
 @app.route("/register", methods=['GET'])
 def register():
     """Request user registration details from the admin user."""
 
     return render_template('register.html')
+
 
 @app.route("/invited_register/<int:user_id>", methods=['GET'])
 def invited_register(user_id):
@@ -113,6 +116,7 @@ def add_admin_user():
 
     return redirect('/create_house_pref')
 
+
 @app.route("/create_house_pref", methods=['POST','GET'])
 def create_house_pref():
     """Scheduling preference where admin user picks chores, invites house members and schedule length."""
@@ -120,6 +124,7 @@ def create_house_pref():
     chore_objs = Chore.query.all()
 
     return render_template('create_house_pref.html', chore_objs=chore_objs)
+
 
 @app.route("/pass_chore_freq", methods=['POST'])
 def pass_chore_freq():
@@ -133,6 +138,7 @@ def pass_chore_freq():
     return jsonify({'chore_name': chore_name,
                     'week_freq': week_freq,
                     'day': day})
+
 
 @app.route("/create_user_chores", methods=['POST'])
 def create_user_chores():
@@ -235,11 +241,13 @@ def create_user_chores():
 
     return render_template('calendar_view.html')
 
+
 @app.route("/calendar_view", methods=['GET'])
 def calendar_view():
     """Renders the calendar view of the user's house and chores assigned."""
 
     return render_template('calendar_view.html')
+
 
 @app.route("/render_house_chores", methods=['POST'])
 def render_house_chores():
@@ -258,11 +266,13 @@ def render_house_chores():
 
     return jsonify(user_chores_dict)
 
+
 @app.route("/personal_view", methods=['GET'])
 def personal_view():
     """Renders the personal task list view of the user's assigned chores."""
 
     return render_template('personal_view.html')
+
 
 @app.route("/render_personal_chores", methods=['POST'])
 def render_personal_chores():
@@ -279,11 +289,35 @@ def render_personal_chores():
     print user_chores_dict
     return jsonify(user_chores_dict)
 
+
+@app.route("/chore_done", methods=['POST'])
+def chore_done():
+    """When chore is completed in personal view, update the database."""
+
+    result = request.form.get("hidden_personal_chore_input")
+    print result
+
+    return jsonify({"result": result})
+
+
+
+@app.route("/chore_undone", methods=['POST'])
+def chore_undone():
+    """When chore is unchecked in personal view, update the database."""
+
+    result = request.form.get("hidden_personal_chore_input")
+    print result
+
+    return jsonify({"result": result})
+
+
+
 @app.route("/house_pref_view", methods=['GET'])
 def house_pref_view():
     """Renders summary of house preferences."""
 
     return render_template('house_pref_view_only.html')
+
 
 @app.route('/process_login', methods=['POST'])
 def process_login():
@@ -310,6 +344,7 @@ def process_login():
     except NoResultFound:
         flash("Username not recognized. Please re-enter or register below.")
         return redirect('/')
+
 
 @app.route('/logout')
 def logout():
