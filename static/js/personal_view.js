@@ -9,15 +9,15 @@ $(document).ready(function() {
 			
 			$('#personal_chores').append($('<li>').html(
 				user_chore + ': ' + 
-				result[user_chore][0] + ': ' + 
-				result[user_chore][1]
+				result[user_chore][0][0] + ': ' + 
+				result[user_chore][0][1]
 			));
 
 			$('#personal_chores').append($('<input>').attr({
 				name: 'pc' + +pc_count,
-				id: 'pc' + +result[user_chore][2], // this is the user_chore.id
+				id: 'pc' + +result[user_chore][0][2], // this is the user_chore.id
 				type: 'checkbox',
-				value: result[user_chore][2]
+				value: result[user_chore][0][2]
 			}));
 		}
 	});
