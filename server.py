@@ -39,17 +39,19 @@ MY_TWILIO_NUMBER = os.environ['MY_TWILIO_NUMBER']
 def hello_monkey():
     """Respond and greet the caller by name."""
  
-    from_number = request.values.get('From', None)
-    if from_number in callers:
-        message = callers[from_number] + ", thanks for the message!"
-        client.messages.create(
-			to=from_number, 
-			from_=MY_TWILIO_NUMBER, 
-			body=message,  
-        )
-    else:
-        message = "Monkey, thanks for the message!"
+   #  from_number = request.values.get('From', None)
+   #  if from_number in callers:
+   #      message = callers[from_number] + ", thanks for the message!"
+   #      client.messages.create(
+			# to=from_number, 
+			# from_=MY_TWILIO_NUMBER, 
+			# body=message,  
+   #      )
+   #  else:
+   #      message = "Monkey, thanks for the message!"
  
+    message = client.messages.create(to=MY_PHONE_NUMBER, from_=MY_TWILIO_NUMBER,
+                                     body="Hello there!")
     resp = twilio.twiml.Response()
     resp.message(message)
  
@@ -240,6 +242,25 @@ def create_user_chores():
             db.session.commit()
 
     return render_template('calendar_view.html')
+
+@app.route("/invite_housemates", methods=['POST'])
+def invite_housemates():
+    """Routed from create_house_pref view after create_user_chores to invite housemates"""
+
+    # get list of housemates
+    housemates_list = User.query.filter(User.house_id==session['house_id'], User.is_admin==0).all()
+
+    for housemate in housemates_list:
+        message = "Chore Me Invitation :) Click here for amazingness!"
+        client.messages.create(
+            to=housemate.phone,
+            from_=MY_TWILIO_NUMBER,
+            body=message)
+        resp = twilio.twiml.Response()
+        resp.message(message)
+ 
+    return str(resp)
+
 
 
 @app.route("/calendar_view", methods=['GET'])

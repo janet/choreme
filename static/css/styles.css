@@ -1,0 +1,20 @@
+#calendar table {
+	border: 1px solid gray;
+}
+
+#calendar table td {
+	border: 1px solid gray;
+	padding: 3px 3px 20px 20px;
+	text-align: right;
+}
+
+#calendar table thead td {
+	background-color: lightgray;
+	padding: 3px;
+	text-align: center;
+
+}
+
+.selected_day{
+	background-color: lightgray;
+}
