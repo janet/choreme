@@ -7,29 +7,8 @@
 </ul>
 
 <div id="calendar"></div>
-<script type="text/javascript">
 
-
-// there are a lot of options. the rabbit hole is deep.
-$('#calendar').clndr({
-  template: $('#calendar-template').html(),
-  events: [
-    { date: '2013-09-09', title: 'CLNDR GitHub Page Finished', url: 'http://github.com/kylestetz/CLNDR' }
-  ],
-  clickEvents: {
-    click: function(target) {
-      console.log(target);
-      $(target.element).addClass('selected_day');
-    },
-    onMonthChange: function(month) {
-      console.log('you just went to ' + month.format('MMMM, YYYY'));
-    }
-  },
-  doneRendering: function() {
-    console.log('this would be a fine place to attach custom event handlers.');
-  }
-});
-</script>
+<div id="render-house-chores"></div>
 
 <input type="button" onclick="location.href='/personal_view';" value="Personal View">
 <input type="button" onclick="location.href='/house_pref_view';" value="House Pref"> 

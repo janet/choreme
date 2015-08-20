@@ -16,7 +16,7 @@
 <body>
   Chore Me
   
-<!-- If no user logged in, display login button -->
+<!-- If user logged in, display logout button -->
   {% if session['user_id'] %}
       <form action='/logout' align="right">
             <span>

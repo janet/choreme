@@ -280,10 +280,10 @@ def render_house_chores():
     user_chores_dict = {}
     for user in house.users:
         for user_chore in user.user_chores:
-            if user_chore.due_date.strftime("%m/%d/%y") in user_chores_dict:
-                user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")].append((user_chore.chore.name, user_chore.user.username, user_chore.is_done, user_chore.id))
+            if user_chore.due_date.strftime("%Y-%m-%d") in user_chores_dict:
+                user_chores_dict[user_chore.due_date.strftime("%Y-%m-%d")].append((user_chore.chore.name, user_chore.user.username, user_chore.is_done, user_chore.id))
             else:
-                user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")] = [(user_chore.chore.name, user_chore.user.username, user_chore.is_done, user_chore.id)]
+                user_chores_dict[user_chore.due_date.strftime("%Y-%m-%d")] = [(user_chore.chore.name, user_chore.user.username, user_chore.is_done, user_chore.id)]
 
     return jsonify(user_chores_dict)
 
