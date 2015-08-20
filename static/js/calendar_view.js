@@ -1,5 +1,5 @@
 // when the document is finished loading, ajax request house chore data
-var arrayOfEvents = []	;
+var arrayOfEvents = [];
 $(document).ready(
 	function() {
 		// query the database first and return an array of ojects of the chores
@@ -55,17 +55,21 @@ function renderCalendar(data){
 		clickEvents: {
 			click: function(target) {
 				console.log(target);
+
+				// remove the gray highlight from all calendar days on click
 				$('.selected_day').removeClass('selected_day');
+
+				// reset the chores that display on click
 				$('#render-house-chores').html("");
 
-
+				// add the gray highlight on click
 				$(target.element).toggleClass('selected_day');
 
 				// when user clicks on a day, render the assigned chores
 				if ($(target.element).hasClass('selected_day')) {
-
 					for (var rcEventsIndex in target.events){
-						$('#render-house-chores').append(rcChoreDiv)
+						console.log("72" +target.events[rcEventsIndex].chore)
+						console.log("74" + $('#render-house-chores'))
 
 						// create a div to put the chores to render on day click
 						var rcChoreDiv = $('<div>');
@@ -75,10 +79,9 @@ function renderCalendar(data){
 							target.events[rcEventsIndex].chore + ' ' +
 							target.events[rcEventsIndex].assignedTo + ' ' +
 							target.events[rcEventsIndex].is_done)
+						$('#render-house-chores').append(rcChoreDiv)
+						
 					}
-				}
-				else {
-					$('#render-house-chores').html("")
 				}
 			},
 			onMonthChange: function(month) {
