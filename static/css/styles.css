@@ -19,3 +19,9 @@
 	background-color: lightgray;
 }
 
+.moved { 
+	color: gray; 
+	text-decoration: line-through; 
+}
+
+

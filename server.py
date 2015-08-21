@@ -119,11 +119,50 @@ def add_invited_user():
 
 @app.route("/create_house_pref", methods=['POST','GET'])
 def create_house_pref():
-    """Scheduling preference where admin user picks chores, invites house members and schedule length."""
+    """Scheduling preference where admin user picks chores, 
+    invites house members and schedule length.
+    Also processes re-scheduling."""
 
+    # get the chore objects to render in the select chores table
     chore_objs = Chore.query.all()
 
-    return render_template('create_house_pref.html', chore_objs=chore_objs)
+    # get the admin phone that was just added
+    admin_phone = User.query.get(session['user_id']).phone
+
+
+    # if there is already a schedule, render it
+    try:
+        # get the current chore information to display for reference purposes
+        house_name = House.query.get(session["house_id"]).name
+        # over-write the admin phone from before in case a non-admin is viewing
+        admin_phone = User.query.filter(User.house_id==session['house_id'], User.is_admin==1).one().phone
+
+        # unpack this in jinja to get the housemate phones
+        housemates_list = User.query.filter(User.house_id==session['house_id'], User.is_admin==0).all()
+
+        # get house_chores
+        housechores_list = HouseChore.query.filter(HouseChore.house_id==session['house_id']).all()
+
+        # get current schedule start date and length
+        house_start_date = House.query.get(session["house_id"]).start_date
+        house_num_weeks = House.query.get(session["house_id"]).num_weeks
+
+        return render_template('create_house_pref.html', chore_objs=chore_objs,
+                                                         house_name=house_name,
+                                                         admin_phone=admin_phone,
+                                                         housemates_list=housemates_list,
+                                                         housechores_list=housechores_list,
+                                                         house_start_date=house_start_date,
+                                                         house_num_weeks=house_num_weeks
+                                                         )
+
+    # if there is no house_id in the session, this is the first time the page is
+    # visited, so render the template with no previous schedule info
+    except TypeError:
+        pass
+
+    return render_template('create_house_pref.html', chore_objs=chore_objs,
+                                                     admin_phone=admin_phone)
 
 
 @app.route("/pass_chore_freq", methods=['POST'])
@@ -336,14 +375,6 @@ def chore_undone():
     db.session.commit()
 
     return jsonify({"result": user_chore_id})
-
-
-
-@app.route("/house_pref_view", methods=['GET'])
-def house_pref_view():
-    """Renders summary of house preferences."""
-
-    return render_template('house_pref_view_only.html')
 
 
 @app.route('/process_login', methods=['POST'])

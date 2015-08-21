@@ -8,13 +8,28 @@
 <form action="/create_user_chores" method="POST">
     <h3>Add Your House</h3>
     	House Name: 
-    	<input type="text" name="house_name" placeholder="Monkey House" required><br>
+    	{% if house_name %}
+	    	<span name="house_name">{{ house_name }}</span><br>
+    	{% else %}
+	    	<input type="text" name="house_name" placeholder="Monkey House" required><br>
+	    {% endif %}
     <br>
 
     <h3>House Members:</h3>
     	Admin Phone: 
-    	<input type="text" name="admin_phone" placeholder="+15105551234"><br>
-    	<div id="phone-inputs"></div>
+    	<span name="admin_phone">{{ admin_phone }}</span><br>
+    	<div id="phone-inputs">
+    		{% if house_name %}
+    			{% for housemate in housemates_list %}
+    				<span>Housemate phone: </span>
+    				<input name="housemate_phone{{ loop.index }}" id="housemate_phone{{ loop.index }}" type="text" value="{{ housemate.phone }}" required><!-- 
+    				 --><button name="remove_phone_button">Remove</button>
+    				<br>
+
+    			{% endfor %}
+    				
+    		{% endif %}
+    	</div>
     	<button id="add-phone-button" name="add-phone-button">add Housemate</button>
     	<br>Housemate Count<input type="text" name="housemate_count" id="housemate_count">
     <br>
@@ -44,11 +59,6 @@
 			weeks<br>
 		<input type="submit" value="CHORE ME">
 </form>
-
-
-<style>
-   .moved { color: gray; text-decoration: line-through; }
-</style>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

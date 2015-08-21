@@ -65,6 +65,9 @@ function removePhone(evt) {
 	// $('#housemate_count').val($('#phone-inputs span').length)
 }
 
+// also call removePhone on dom originating remove buttons 
+$('button[name="remove_phone_button"]').on('click', removePhone)
+
 // event listener for add phone button to create a new input field
 $("#add-phone-button").on('click', addPhone)
 
