@@ -44,7 +44,16 @@
 
 		Selected Table<br>
 			<ul id="chore-selected">
-				<!-- chores go here -->
+				{% if house_name %}
+					{% for house_chore in housechores_list %}
+						<li>
+							<a href: "#", data-target: '#myModal', data-toggle: 'modal', id: '{{ house_chore.chore.name }}'>
+								{{ house_chore.chore.name }}
+							</a><!-- 
+							 --><button name: "remove_chore_button">Remove</button>
+						</li>
+					{% endfor %}
+				{% endif %}
 			</ul>
 
 	<!-- div that is filled by clicks to the chore-potentials table with frequencies set by modal window -->
@@ -54,10 +63,20 @@
 	<br>Please select a frequency for each chore<br>
 
 	<br>
-		Schedule out for: 
-		<input type="number" min="1" max="52" name="num_weeks" required>
-			weeks<br>
-		<input type="submit" value="CHORE ME">
+		{% if house_name %}
+			Current Schedule Start Date: {{ house_start_date }} <br>
+			Re-Schedule out for: 
+			<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>
+				weeks<br>
+			<input type="submit" value="CHORE ME AGAIN">
+			This will delete all future chores of the current schedule.
+		{% else %}
+			Schedule out for: 
+			<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>
+				weeks<br>
+			<input type="submit" value="CHORE ME">
+		{% endif %}
+
 </form>
 
 <!-- Modal -->

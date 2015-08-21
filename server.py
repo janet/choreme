@@ -152,7 +152,7 @@ def create_house_pref():
                                                          admin_phone=admin_phone,
                                                          housemates_list=housemates_list,
                                                          housechores_list=housechores_list,
-                                                         house_start_date=house_start_date,
+                                                         house_start_date=datetime.datetime.strftime(house_start_date, "%m/%d/%y"),
                                                          house_num_weeks=house_num_weeks
                                                          )
 

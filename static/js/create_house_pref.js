@@ -110,7 +110,7 @@ function selectChore(evt) {
 	$("#hidden_count_of_chores").val(hiddenChoreInput_count)
 }
 
-// event listener for when user clicks on select from chores table
+// event listener for when user clicks on chore-potentials
 $("#chore-potentials li").on('click', selectChore);
 
 function choreModal(evt) {
