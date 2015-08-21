@@ -9,12 +9,12 @@ $(document).ready(
 			success: function(result) {
 				// reparse the results from json from object {date: (chore name, username, is_done, id)}
 				// to array of object [{date: date, chore: chore, etc}, {date:date, chore: chore, etc}]
-				console.log(result)
+				// console.log(result)
 
 				// for each date of chores in the house
 				for (var user_chore_date in result) {
-					console.log("user_chore_date: " + user_chore_date);
-					console.log("result[user_chore_date]: " + result[user_chore_date]);
+					// console.log("user_chore_date: " + user_chore_date);
+					// console.log("result[user_chore_date]: " + result[user_chore_date]);
 
 					$('#user_chores').append($('<li>').html(user_chore_date));
 
@@ -23,9 +23,9 @@ $(document).ready(
 						$('#user_chores').append($('<ul>').html(
 							$('<li>').html(
 								result[user_chore_date][user_chore].slice(0,3)))); 
-						console.log("result[user_chore_date][user_chore].slice(0,3): " + result[user_chore_date][user_chore].slice(0,3))
+						// console.log("result[user_chore_date][user_chore].slice(0,3): " + result[user_chore_date][user_chore].slice(0,3))
 						// for some reason is not displaying when 'false', fix this
-						console.log("result[user_chore_date][user_chore][3]: " + result[user_chore_date][user_chore][3]) // returns id
+						// console.log("result[user_chore_date][user_chore][3]: " + result[user_chore_date][user_chore][3]) // returns id
 						// result[user_chore_date][user_chore] is each chore tuple (chore name, username, is_done, id)
 
 						// format object into array of event objects to inject into calendar
@@ -37,8 +37,8 @@ $(document).ready(
 							choreId: result[user_chore_date][user_chore][3]
 						});
 					}
-					console.log("arrayOfEvents30" + arrayOfEvents)
-					console.log(arrayOfEvents[0])
+					// console.log("arrayOfEvents30" + arrayOfEvents)
+					// console.log(arrayOfEvents[0])
 				};
 				renderCalendar(arrayOfEvents)
 			}
@@ -49,14 +49,14 @@ $(document).ready(
 
 
 function renderCalendar(data){
-	$('#calendar').clndr({
+	// create a calendar instance and pass it the database queried events
+	var myCalendar = $('#calendar').clndr({
 		template: $('#calendar-template').html(),
 		events: data,
 		clickEvents: {
 			click: function(target) {
 				console.log(target);
-
-				// remove the gray highlight from all calendar days on click
+				// remove the gray highlight from any other selected calendar days on click
 				$('.selected_day').removeClass('selected_day');
 
 				// reset the chores that display on click
@@ -68,9 +68,6 @@ function renderCalendar(data){
 				// when user clicks on a day, render the assigned chores
 				if ($(target.element).hasClass('selected_day')) {
 					for (var rcEventsIndex in target.events){
-						console.log("72" +target.events[rcEventsIndex].chore)
-						console.log("74" + $('#render-house-chores'))
-
 						// create a div to put the chores to render on day click
 						var rcChoreDiv = $('<div>');
 
@@ -79,8 +76,8 @@ function renderCalendar(data){
 							target.events[rcEventsIndex].chore + ' ' +
 							target.events[rcEventsIndex].assignedTo + ' ' +
 							target.events[rcEventsIndex].is_done)
+
 						$('#render-house-chores').append(rcChoreDiv)
-						
 					}
 				}
 			},
@@ -92,4 +89,8 @@ function renderCalendar(data){
 			console.log('this would be a fine place to attach custom event handlers.');
 		}
 	});
+	// on the calendar instance mark the days that have scheduled chores
+	
+
+
 }

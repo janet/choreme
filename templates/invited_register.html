@@ -2,10 +2,11 @@
 {% block content %}
 
 <h2>Sign Up</h2>
-<form action="/add_user" method="POST">
+<form action="/add_invited_user" method="POST">
 	<input type="text" name="username" placeholder="Username" required><br>	
 	<input type="password" placeholder="Password" name="password" required><br>
     <input type="password" placeholder="Confirm Password" id="confirm_password" required><br>
+   	<input type="text" name="user_id" value= "{{ invited_user.id }}"><br>
 	<input type="submit" value="Sign Up">	
 </form>
 

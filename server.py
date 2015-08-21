@@ -35,27 +35,6 @@ MY_TWILIO_NUMBER = os.environ['MY_TWILIO_NUMBER']
 
 ##############################################################################
 
-@app.route("/twilio", methods=['GET', 'POST'])
-def hello_monkey():
-    """Respond and greet the caller by name."""
- 
-   #  from_number = request.values.get('From', None)
-   #  if from_number in callers:
-   #      message = callers[from_number] + ", thanks for the message!"
-   #      client.messages.create(
-			# to=from_number, 
-			# from_=MY_TWILIO_NUMBER, 
-			# body=message,  
-   #      )
-   #  else:
-   #      message = "Monkey, thanks for the message!"
- 
-    message = client.messages.create(to=MY_PHONE_NUMBER, from_=MY_TWILIO_NUMBER,
-                                     body="Hello there!")
-    resp = twilio.twiml.Response()
-    resp.message(message)
- 
-    return str(resp)
 
 
 @app.route("/", methods=['GET'])
@@ -63,7 +42,6 @@ def login():
     """Index route will be a login page requesting username and password"""
     
     try:
-        session["user_id"]
         if session["user_id"] is None:
             return render_template("login.html")
         return redirect("/calendar_view")
@@ -79,7 +57,7 @@ def register():
     return render_template('register.html')
 
 
-@app.route("/invited_register/<int:user_id>", methods=['GET'])
+@app.route("/<int:user_id>", methods=['GET']) # this is a short url in order to fit sms size limits
 def invited_register(user_id):
     """Request user information from invited (non-admin) users."""
 
@@ -88,7 +66,7 @@ def invited_register(user_id):
     return render_template('invited_register.html', invited_user=invited_user)
 
 
-@app.route("/add_admin_user", methods=['POST', 'GET'])
+@app.route("/add_admin_user", methods=['POST'])
 def add_admin_user():
     """Add admin user into database from registration form."""
 
@@ -96,9 +74,6 @@ def add_admin_user():
     username = request.form.get('username')
     phone = request.form.get('phone')
     password = request.form.get('password')
-
-    # get new house information
-    house_name = request.form.get('house_name')
 
     new_user = User(username=username,
                     phone=phone,
@@ -113,10 +88,33 @@ def add_admin_user():
 
     session['user_id'] = admin_user_id
     print session['user_id']
-    flash("session user_id: ", session['user_id'])
-
+    flash("session user_id: " + str(session['user_id']))
 
     return redirect('/create_house_pref')
+
+@app.route("/add_invited_user", methods=['POST'])
+def add_invited_user():
+    """Update invited user in database with username and password info.
+    Redirect to the calendar_view."""
+
+    # get username, password and id info
+    username = request.form.get('username')
+    password = request.form.get('password')
+    user_id = request.form.get('user_id')
+
+    # update user in database
+    user = User.query.get(user_id)
+    user.username = username
+    user.password = password
+
+    # commit changes to the database
+    db.session.commit()
+
+    # add user_id & house_id to the session
+    session["user_id"] = user_id
+    session["house_id"] = user.house.id
+
+    return redirect('/calendar_view')
 
 
 @app.route("/create_house_pref", methods=['POST','GET'])
@@ -159,25 +157,25 @@ def create_user_chores():
     db.session.add(new_house)
     db.session.commit()
 
-    # add the house id to the session and to the admin user
+    # add the house id to the session
     house = House.query.filter(House.name==house_name).one()
     house_id = house.id
     session['house_id'] = house_id
 
+    # add house id to the admin user
     admin_user = User.query.get(session['user_id'])
     admin_user.house_id = house_id
 
     # create new user with phone number
     for i in range(housemate_count):
-        housemate_input_name = "housemate_phone" + str(i+1)
+        housemate_input = "housemate_phone" + str(i+1)
         try:
-            request.form.get(housemate_input_name)
-            housemate_phone = request.form.get(housemate_input_name)
+            request.form.get(housemate_input)
+            housemate_phone = request.form.get(housemate_input)
             if housemate_phone is not None:
                 new_user = User(phone=housemate_phone,
                                 house_id=house_id)
                 db.session.add(new_user)
-                db.session.commit()
         except:
             pass
 
@@ -196,10 +194,11 @@ def create_user_chores():
                                             week_freq=int(week_freq)
                                             )
                 db.session.add(new_housechore)
-                db.session.commit()
         except:
             pass
 
+    # commit new housemates and house chores here
+    db.session.commit()
 
     # create new user chores
 
@@ -239,27 +238,30 @@ def create_user_chores():
                                         due_date=due_date)
 
             db.session.add(new_userchore)
-            db.session.commit()
+    db.session.commit()
 
-    return render_template('calendar_view.html')
+    return redirect("/calendar_view") # use this to conserve texts for testing
+    # return redirect("/invite_housemates") 
 
-@app.route("/invite_housemates", methods=['POST'])
+
+@app.route("/invite_housemates", methods=['POST','GET'])
 def invite_housemates():
     """Routed from create_house_pref view after create_user_chores to invite housemates"""
 
-    # get list of housemates
+    # get list of housemates that isn't the admin
     housemates_list = User.query.filter(User.house_id==session['house_id'], User.is_admin==0).all()
 
     for housemate in housemates_list:
         message = "Chore Me Invitation :) Click here for amazingness!"
         client.messages.create(
-            to=housemate.phone,
+            # to=housemate.phone, 
+            to=MY_PHONE_NUMBER, #using this for testing purposes
             from_=MY_TWILIO_NUMBER,
             body=message)
         resp = twilio.twiml.Response()
         resp.message(message)
  
-    return str(resp)
+    return redirect("/calendar_view")
 
 
 
