@@ -204,8 +204,23 @@ function renderHouseChores() {
 	// add it to the hidden count of chores input
 	$("#hidden_count_of_chores").val(hiddenChoreInput_count)
 
+	// create an array of housechore names
+	var housechoreArray = []
+
+	for (var i=0; i < $('#chore-selected a').length; i++) {
+		housechoreArray.push($($('#chore-selected a')[i]).attr('id'));
+		console.log($($('#chore-selected a')[i]).attr('id'));
+	}
+
 	// add the moved class for all housechores
-	// need to do this
+	var chorePotentialsArray = $("#chore-potentials li")
+	var chorePotentialsLen = chorePotentialsArray.length
+
+	for (var i = 0; i < chorePotentialsLen; i++) {
+		if ($.inArray($(chorePotentialsArray[i]).html(), housechoreArray) > -1){
+			$(chorePotentialsArray[i]).addClass('moved')
+		}
+	}
 
 
 	// event listener for when dom originating housechores are clicked
