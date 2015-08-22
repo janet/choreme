@@ -1,3 +1,6 @@
+// render housechores if there are any in the database
+$(document).ready(renderPhones(), renderHouseChores())
+
 function addPhone(evt) {
 	// function to add a phone number input
 
@@ -32,6 +35,9 @@ function addPhone(evt) {
 	$('#housemate_count').val($('#phone-inputs span').length)
 }
 
+// event listener for add phone button to create a new input field
+$("#add-phone-button").on('click', addPhone)
+
 function removePhone(evt) {
 	// remove phone input
 	evt.preventDefault();
@@ -65,12 +71,6 @@ function removePhone(evt) {
 	// $('#housemate_count').val($('#phone-inputs span').length)
 }
 
-// also call removePhone on dom originating remove buttons 
-$('button[name="remove_phone_button"]').on('click', removePhone)
-
-// event listener for add phone button to create a new input field
-$("#add-phone-button").on('click', addPhone)
-
 function selectChore(evt) {
 	// function to add chore-potential elements to the chore-selected table with a modal link
 	var chore = $(evt.target);
@@ -103,8 +103,10 @@ function selectChore(evt) {
 	var hiddenChoreInput = $('<input>').attr({
 		name: 'chores' + +hiddenChoreInput_count,
 		id: 'hidden'+chore.html(),
-		value: chore.html()
+		value: chore.html(),
+		type: 'text'
 	});
+
 	$("#chore-selected-inputs").append(hiddenChoreInput);
 
 	$("#hidden_count_of_chores").val(hiddenChoreInput_count)
@@ -175,4 +177,45 @@ function removeChore(evt) {
 	var changedChorePotential = $("[name|='"+rCChore+"']")
 	changedChorePotential.removeClass('moved')
 };
+
+function renderPhones() {
+	// function to add same click events to dom originating elements
+	// that come from the database when schedule is already created
+
+	// create housemate count to add to ids and input names
+	var housemate_count = ($('#phone-inputs span').length +1)	
+
+	// count number of housemates and put in hidden input
+	$('#housemate_count').val($('#phone-inputs span').length)
+
+	// add event listener to remove_phone_button for dom originating elements
+	$('button[name="remove_phone_button"]').on('click', removePhone)
+
+
+}
+
+function renderHouseChores() {
+	// function to add same click events to dom originating elements
+	// that come from the database when schedule is already created
+
+	// count the number of chore selected inputs 
+	var hiddenChoreInput_count = ($('#chore-selected-inputs input').length)
+
+	// add it to the hidden count of chores input
+	$("#hidden_count_of_chores").val(hiddenChoreInput_count)
+
+	// add the moved class for all housechores
+	// need to do this
+
+
+	// event listener for when dom originating housechores are clicked
+	$(".housechore").on('click', choreModal)
+
+	// add event listener for dom originating chores
+	$("button[name='remove_chore_button']").on('click', removeChore)
+}
+
+
+
+
 

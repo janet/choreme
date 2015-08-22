@@ -3,81 +3,90 @@
 
 <h2>Create House Preferences</h2>
 
+<!-- if we have previously created a schedule, submit to the reschedule route, otherwise go to create_user_chores -->
+{% if house_name %}
+	<form action="/reschedule_user_chores" method="POST"></form>
+{% else %}
+	<form action="/create_user_chores" method="POST">
+{% endif %}
+	    <h3>Add Your House</h3>
+	    	House Name: 
+	    	{% if house_name %}
+		    	<span name="house_name">{{ house_name }}</span><br>
+	    	{% else %}
+		    	<input type="text" name="house_name" placeholder="Monkey House" required><br>
+		    {% endif %}
+	    <br>
 
+	    <h3>House Members:</h3>
+	    	Admin Phone: 
+	    	<span name="admin_phone">{{ admin_phone }}</span><br>
+	    	<div id="phone-inputs">
+	    		{% if house_name %}
+	    			{% for housemate in housemates_list %}
+	    				<span>Housemate phone: </span>
+	    				<input name="housemate_phone{{ loop.index }}" id="housemate_phone{{ loop.index }}" type="text" value="{{ housemate.phone }}" required><!-- 
+	    				 --><button name="remove_phone_button">Remove</button>
+	    				<br>
 
-<form action="/create_user_chores" method="POST">
-    <h3>Add Your House</h3>
-    	House Name: 
-    	{% if house_name %}
-	    	<span name="house_name">{{ house_name }}</span><br>
-    	{% else %}
-	    	<input type="text" name="house_name" placeholder="Monkey House" required><br>
-	    {% endif %}
-    <br>
+	    			{% endfor %}
+	    				
+	    		{% endif %}
+	    	</div>
+	    	<button id="add-phone-button" name="add-phone-button">add Housemate</button>
+	    	<br>Housemate Count<input type="text" name="housemate_count" id="housemate_count">
+	    <br>
 
-    <h3>House Members:</h3>
-    	Admin Phone: 
-    	<span name="admin_phone">{{ admin_phone }}</span><br>
-    	<div id="phone-inputs">
-    		{% if house_name %}
-    			{% for housemate in housemates_list %}
-    				<span>Housemate phone: </span>
-    				<input name="housemate_phone{{ loop.index }}" id="housemate_phone{{ loop.index }}" type="text" value="{{ housemate.phone }}" required><!-- 
-    				 --><button name="remove_phone_button">Remove</button>
-    				<br>
+	    <h3>Choose Your Chores</h3>
+	    	Select From Table<br>
+			    {% for chore in chore_objs %}
+				    <ul id="chore-potentials">
+				    	<li>{{ chore.name }}</li>
+				    </ul>
+			    {% endfor %}
 
-    			{% endfor %}
-    				
-    		{% endif %}
-    	</div>
-    	<button id="add-phone-button" name="add-phone-button">add Housemate</button>
-    	<br>Housemate Count<input type="text" name="housemate_count" id="housemate_count">
-    <br>
+			Selected Table<br>
+				<ul id="chore-selected">
+					{% if house_name %}
+						{% for house_chore in housechores_list %}
+							<li>
+								<a href= "#", data-target= '#myModal', data-toggle= 'modal', id= '{{ house_chore.chore.name }}', class= "housechore">
+										{{ house_chore.chore.name }}|{{ house_chore.week_freq }}|{{ house_chore.day }}
+								</a><!-- 
+								 --><button name: "remove_chore_button">Remove</button>
+							</li>
+						{% endfor %}
+					{% endif %}
+				</ul>
 
-    <h3>Choose Your Chores</h3>
-    	Select From Table<br>
-		    {% for chore in chore_objs %}
-			    <ul id="chore-potentials">
-			    	<li>{{ chore.name }}</li>
-			    </ul>
-		    {% endfor %}
+		<!-- div that is filled by clicks to the chore-potentials table with frequencies set by modal window -->
+		<div id="chore-selected-inputs">
+			{% if house_name %}
+				{% for house_chore in housechores_list %}
+					<input name="chores{{ loop.index }}", id="hidden{{ house_chore.chore.name }}", value="{{ house_chore.chore.name }}|{{ house_chore.week_freq }}|{{ house_chore.day }}" type="text"> 
+				{% endfor %}
+			{% endif %}
+		</div>
+		<input type="text" name="hidden_count_of_chores" id="hidden_count_of_chores">
 
-		Selected Table<br>
-			<ul id="chore-selected">
-				{% if house_name %}
-					{% for house_chore in housechores_list %}
-						<li>
-							<a href: "#", data-target: '#myModal', data-toggle: 'modal', id: '{{ house_chore.chore.name }}'>
-								{{ house_chore.chore.name }}
-							</a><!-- 
-							 --><button name: "remove_chore_button">Remove</button>
-						</li>
-					{% endfor %}
-				{% endif %}
-			</ul>
+		<br>Please select a frequency for each chore<br>
 
-	<!-- div that is filled by clicks to the chore-potentials table with frequencies set by modal window -->
-	<div id="chore-selected-inputs"></div>
-	<input type="text" name="hidden_count_of_chores" id="hidden_count_of_chores">
+		<br>
+			{% if house_name %}
+				Current Schedule Start Date: {{ house_start_date }} <br>
+				Re-Schedule out for: 
+				<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>
+					weeks<br>
+				<input type="submit" value="CHORE ME AGAIN">
+				This will delete all future chores of the current schedule.
+			{% else %}
+				Schedule out for: 
+				<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>
+					weeks<br>
+				<input type="submit" value="CHORE ME">
+			{% endif %}
 
-	<br>Please select a frequency for each chore<br>
-
-	<br>
-		{% if house_name %}
-			Current Schedule Start Date: {{ house_start_date }} <br>
-			Re-Schedule out for: 
-			<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>
-				weeks<br>
-			<input type="submit" value="CHORE ME AGAIN">
-			This will delete all future chores of the current schedule.
-		{% else %}
-			Schedule out for: 
-			<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>
-				weeks<br>
-			<input type="submit" value="CHORE ME">
-		{% endif %}
-
-</form>
+	</form>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
