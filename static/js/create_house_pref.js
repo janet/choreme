@@ -209,7 +209,6 @@ function renderHouseChores() {
 
 	for (var i=0; i < $('#chore-selected a').length; i++) {
 		housechoreArray.push($($('#chore-selected a')[i]).attr('id'));
-		console.log($($('#chore-selected a')[i]).attr('id'));
 	}
 
 	// add the moved class for all housechores
@@ -218,7 +217,8 @@ function renderHouseChores() {
 
 	for (var i = 0; i < chorePotentialsLen; i++) {
 		if ($.inArray($(chorePotentialsArray[i]).html(), housechoreArray) > -1){
-			$(chorePotentialsArray[i]).addClass('moved')
+			$(chorePotentialsArray[i]).addClass('moved');
+			$(chorePotentialsArray[i]).attr('name', $(chorePotentialsArray[i]).html())
 		}
 	}
 
@@ -227,7 +227,7 @@ function renderHouseChores() {
 	$(".housechore").on('click', choreModal)
 
 	// add event listener for dom originating chores
-	$("button[name='remove_chore_button']").on('click', removeChore)
+	$('button[name="remove_chore_button"]').on('click', removeChore)
 }
 
 

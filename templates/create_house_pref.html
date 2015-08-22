@@ -51,9 +51,9 @@
 						{% for house_chore in housechores_list %}
 							<li>
 								<a href= "#", data-target= '#myModal', data-toggle= 'modal', id= '{{ house_chore.chore.name }}', class= "housechore">
-										{{ house_chore.chore.name }}|{{ house_chore.week_freq }}|{{ house_chore.day }}
-								</a><!-- 
-								 --><button name: "remove_chore_button">Remove</button>
+											{{ house_chore.chore.name }}|{{ house_chore.week_freq }}|{{ house_chore.day }}<!-- 
+									 --></a><!-- 
+								 --><button name="remove_chore_button">Remove</button>
 							</li>
 						{% endfor %}
 					{% endif %}
