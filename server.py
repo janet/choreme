@@ -335,6 +335,10 @@ def recreate_user_chores():
     for userchore in inactivate_userchores:
         userchore.is_active = False # inactivate userchore
 
+    # remove housechore from house
+    for housechore in house.house_chores:
+        housechore.house_id = None # inactivate previous housechores
+
     # update House start_date
     House.query.get(house_id).start_date = datetime.datetime.now()
 
@@ -447,7 +451,8 @@ def render_house_chores():
     # create a dictionary with the date as a key and values as a list of tuples of user_chore data
     user_chores_dict = {}
     for user in house.users:
-        for user_chore in user.user_chores:
+        for user_chore in UserChore.query.filter(UserChore.is_active==True, UserChore.user_id==user.id).all():
+            print user_chore
             if user_chore.due_date.strftime("%Y-%m-%d") in user_chores_dict:
                 user_chores_dict[user_chore.due_date.strftime("%Y-%m-%d")].append((user_chore.chore.name, user_chore.user.username, user_chore.is_done, user_chore.id))
             else:

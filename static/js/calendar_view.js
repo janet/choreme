@@ -2,7 +2,7 @@
 var arrayOfEvents = [];
 $(document).ready(
 	function() {
-		// query the database first and return an array of ojects of the chores
+		// query the database first and return an array of objects of the chores
 		$.ajax({
 			url: '/render_house_chores', 
 			method: "POST",

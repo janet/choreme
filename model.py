@@ -46,7 +46,7 @@ class HouseChore(db.Model):
     __tablename__ = "house_chore"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
+    house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=True)
     chore_id = db.Column(db.Integer, db.ForeignKey('chore.id'), nullable=False)
     day = db.Column(db.String(9), nullable=False)
     week_freq = db.Column(db.Integer, nullable=False) 
