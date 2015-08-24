@@ -281,8 +281,8 @@ def create_user_chores():
             db.session.add(new_userchore)
     db.session.commit()
 
-    return redirect("/calendar_view") # use this to conserve texts for testing
-    # return redirect("/invite_housemates") 
+    # return redirect("/calendar_view") # use this to conserve texts for testing
+    return redirect("/invite_housemates") 
 
 @app.route("/recreate_user_chores", methods=['POST'])
 def recreate_user_chores():
@@ -299,9 +299,12 @@ def recreate_user_chores():
     house_id = session['house_id']
     house = House.query.get(house_id)
 
+    # get the admin phone
+    admin_phone = User.query.filter(User.house_id==session['house_id'], User.is_admin==1).one().phone
+
     # get the current housemates and diff against entered
-    housemates_phone_set = set() # previously entered
-    new_housemates_set = set() # newly entered and in previously entered
+    housemates_phone_set = set([admin_phone]) # previously entered + admin
+    new_housemates_set = set([admin_phone]) # newly entered and in previously entered + admin
     for housemate in House.query.get(house_id).users:
         housemates_phone_set.add(housemate.phone)
 
@@ -337,7 +340,7 @@ def recreate_user_chores():
 
     # remove housechore from house
     for housechore in house.house_chores:
-        housechore.house_id = None # inactivate previous housechores
+        housechore.house_id = None # inactivate previous housechores_list
 
     # update House start_date
     House.query.get(house_id).start_date = datetime.datetime.now()
@@ -545,7 +548,8 @@ def logout():
     session['house_id'] = None
 
     return redirect('/')
-   
+
+############################################################################## 
 
 print "you are awesome"
  
