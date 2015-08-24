@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Login Page</h2>
-<form action="/process_login" method="POST">
-	<input type="text" name="username" required placeholder="username"><br>
-	<input type="password" name="password" required placeholder="password"><br>
-	<input type="submit" value="Login"><br>
-	<a href="/register">New? Create a house and invite housemates</a>
-</form>
+<div class="login-form">
+	<h2>Login Page</h2>
+	<form action="/process_login" method="POST">
+		<div class="form-group">
+			<label>Username</label>
+			<input type="text" name="username" required placeholder="username" class="form-control">
+		</div>
+		<div class="form-group">
+			<label>Password</label>
+			<input type="password" name="password" required placeholder="password" class="form-control">
+		</div>
+		<div class="form-group">
+			<input type="submit" value="Login" class="btn btn-primary">
+		</div>
+		<div class="form-group">
+			<a href="/register">New? Create a house and invite housemates</a>
+		</div>
+	</form>
+</div>
 
 {% endblock %}

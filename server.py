@@ -132,6 +132,7 @@ def create_house_pref():
 
     # if there is already a schedule, render it
     try:
+        session["house_id"]
         # get the current chore information to display for reference purposes
         house_name = House.query.get(session["house_id"]).name
         # over-write the admin phone from before in case a non-admin is viewing
@@ -158,6 +159,8 @@ def create_house_pref():
 
     # if there is no house_id in the session, this is the first time the page is
     # visited, so render the template with no previous schedule info
+    except KeyError:
+        pass
     except TypeError:
         pass
 
@@ -185,10 +188,9 @@ def create_user_chores():
     redirects to calendar_view"""
 
     house_name = request.form.get('house_name')
-    admin_phone = request.form.get('admin_phone')
     housemate_count = int(request.form.get('housemate_count'))
     housechore_count = int(request.form.get('hidden_count_of_chores'))
-    num_weeks = request.form.get('num_weeks')
+    num_weeks = int(request.form.get('num_weeks'))
 
 
     # create new house with house name
@@ -207,10 +209,10 @@ def create_user_chores():
 
     # create new user with phone number
     for i in range(housemate_count):
-        housemate_input = "housemate_phone" + str(i+1)
+        housemate_phone = "housemate_phone" + str(i+1)
         try:
-            request.form.get(housemate_input)
-            housemate_phone = request.form.get(housemate_input)
+            request.form.get(housemate_phone)
+            housemate_phone = request.form.get(housemate_phone)
             if housemate_phone is not None:
                 new_user = User(phone=housemate_phone,
                                 house_id=house_id)
@@ -264,8 +266,8 @@ def create_user_chores():
         print "int(house_chore.week_freq)", int(house_chore.week_freq)
 
         # create user chores for each occurrence
-        for i in range(int(house.num_weeks) / int(house_chore.week_freq)):
-            due_date = first_sched_date + datetime.timedelta(days=((i)*(int(house_chore.week_freq)*7)))
+        for i in range(house.num_weeks / house_chore.week_freq):
+            due_date = first_sched_date + datetime.timedelta(days=((i)*(house_chore.week_freq*7)))
 
             housemate = housemates_list[(index + i) % num_housemates]
             print "HOUSEMATE: ", housemate
@@ -282,6 +284,131 @@ def create_user_chores():
     return redirect("/calendar_view") # use this to conserve texts for testing
     # return redirect("/invite_housemates") 
 
+@app.route("/recreate_user_chores", methods=['POST'])
+def recreate_user_chores():
+    """Routed from create_house_pref view to reschedule chores. This route is called
+    to create user chores after the first time chores are created and diffs against
+    against previously entered house prefs."""
+
+    housemate_count = int(request.form.get('housemate_count'))
+    housechore_count = int(request.form.get('hidden_count_of_chores'))
+    num_weeks = int(request.form.get('num_weeks'))
+
+
+    # get the house_id from the session
+    house_id = session['house_id']
+    house = House.query.get(house_id)
+
+    # get the current housemates and diff against entered
+    housemates_phone_set = set() # previously entered
+    new_housemates_set = set() # newly entered and in previously entered
+    for housemate in House.query.get(house_id).users:
+        housemates_phone_set.add(housemate.phone)
+
+    # add new housemate if new 
+    for i in range(housemate_count):
+        housemate_phone = "housemate_phone" + str(i+1)
+        try:
+            request.form.get(housemate_phone)
+            housemate_phone = request.form.get(housemate_phone)
+            if housemate_phone is None:
+                pass
+            elif str(housemate_phone) not in housemates_phone_set:
+                # new user in the house
+                new_user = User(phone=str(housemate_phone),
+                                house_id=house_id)
+                db.session.add(new_user)
+            elif str(housemate_phone) in housemates_phone_set:
+                new_housemates_set.add(str(housemate_phone))
+        except:
+            pass
+
+    # remove housemate if no longer in house
+    remove_housemate = housemates_phone_set - new_housemates_set
+    if remove_housemate:
+        for housemate_phone in remove_housemate:
+            remove_user = User.query.filter(User.phone==housemate_phone, User.house_id==house_id).one()
+            remove_user.house_id = None # unassociate user from house
+
+    # remove any user_chores that were previously created for a future date
+    inactivate_userchores = UserChore.query.filter(UserChore.due_date>=datetime.datetime.now()).all()
+    for userchore in inactivate_userchores:
+        userchore.is_active = False # inactivate userchore
+
+    # update House start_date
+    House.query.get(house_id).start_date = datetime.datetime.now()
+
+
+    # commit changes: adding/removing housemates based on new inputs
+    # inactivating user_chores that were previously created for a future date
+    # and updating start date
+    db.session.commit()
+
+    # create new house chore
+    for i in range(housechore_count):
+        housechore_input_name = "chores" + str(i+1)
+        try:
+            request.form.get(housechore_input_name)
+            housechore_input = request.form.get(housechore_input_name)
+            if housechore_input is not None:
+                chore, week_freq, day = housechore_input.split('|')
+                chore_id = Chore.query.filter(Chore.name==chore).one().id
+                new_housechore = HouseChore(house_id=house_id,
+                                            chore_id=chore_id,
+                                            day=day,
+                                            week_freq=int(week_freq)
+                                            )
+                db.session.add(new_housechore)
+        except:
+            pass
+
+    # commit new house chores here
+    db.session.commit()
+
+    # create new user chores
+
+    # get the date from the house and determine the actual start date
+    init_sched_date = house.start_date
+
+    # create a list of housemates and count the number to assign out to them
+    housemates_list = House.query.get(house_id).users
+    num_housemates = len(housemates_list)
+
+    # use enumerate to create an index for each house chore that allows for easy assignment
+    for index, house_chore in enumerate(house.house_chores):
+        print "index: %s, house_chore: %s" % (index, house_chore)
+
+        # while schedule start day (ie Sunday) != house chore day
+        while datetime.datetime.strftime(init_sched_date,"%A") != house_chore.day: 
+            init_sched_date += datetime.timedelta(days=1)
+
+        # this is the first occurence of the chore
+        first_sched_date = init_sched_date
+        print "first_sched_date = ", first_sched_date
+
+        print "int(house.num_weeks)", int(house.num_weeks)
+        print "int(house_chore.week_freq)", int(house_chore.week_freq)
+
+        # create user chores for each occurrence
+        for i in range(int(house.num_weeks) / int(house_chore.week_freq)):
+            due_date = first_sched_date + datetime.timedelta(days=((i)*(int(house_chore.week_freq)*7)))
+
+            housemate = housemates_list[(index + i) % num_housemates]
+            print "HOUSEMATE: ", housemate
+
+            print "user_id: %s, chore_id: %s, due_date: %s" % (housemate.id, house_chore.chore.id, due_date.strftime("%A, %m/%d/%y"))
+
+            new_userchore = UserChore(user_id=housemate.id, 
+                                        chore_id=house_chore.chore.id,
+                                        due_date=due_date)
+
+            db.session.add(new_userchore)
+
+    # commit new user_chores
+    db.session.commit()
+
+    return redirect("/calendar_view") # use this to conserve texts for testing
+    # return redirect("/invite_housemates")     
 
 @app.route("/invite_housemates", methods=['POST','GET'])
 def invite_housemates():

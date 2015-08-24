@@ -4,11 +4,7 @@
 <h2>Create House Preferences</h2>
 
 <!-- if we have previously created a schedule, submit to the reschedule route, otherwise go to create_user_chores -->
-{% if house_name %}
-	<form action="/reschedule_user_chores" method="POST"></form>
-{% else %}
-	<form action="/create_user_chores" method="POST">
-{% endif %}
+	<form method="POST" name="house_pref_form" id="house_pref_form">
 	    <h3>Add Your House</h3>
 	    	House Name: 
 	    	{% if house_name %}
@@ -47,13 +43,20 @@
 
 			Selected Table<br>
 				<ul id="chore-selected">
+					{% set lookup = {
+									1: "Weekly",
+									2: "Bi-Weekly",
+									3: "Every 3 Weeks",
+									4: "Every 4 Weeks"
+									} 
+					%}
 					{% if house_name %}
 						{% for house_chore in housechores_list %}
 							<li>
 								<a href= "#", data-target= '#myModal', data-toggle= 'modal', id= '{{ house_chore.chore.name }}', class= "housechore">
-											{{ house_chore.chore.name }}|{{ house_chore.week_freq }}|{{ house_chore.day }}<!-- 
+											{{ house_chore.chore.name }}, {{ lookup[house_chore.week_freq] }}, {{ house_chore.day }}<!-- 
 									 --></a><!-- 
-								 --><button name="remove_chore_button">Remove</button>
+								 --><button name=	"remove_chore_button">Remove</button>
 							</li>
 						{% endfor %}
 					{% endif %}
@@ -77,16 +80,16 @@
 				Re-Schedule out for: 
 				<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>
 					weeks<br>
-				<input type="submit" value="CHORE ME AGAIN">
+				<input type="submit" name="recreate_chores" onclick="document.pressed=this.value" value="CHORE ME AGAIN">
 				This will delete all future chores of the current schedule.
 			{% else %}
 				Schedule out for: 
 				<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>
 					weeks<br>
-				<input type="submit" value="CHORE ME">
+				<input type="submit" name="create_chores" onclick="document.pressed=this.value" value="CHORE ME">
 			{% endif %}
-
 	</form>
+
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

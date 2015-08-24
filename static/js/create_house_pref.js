@@ -138,12 +138,19 @@ function passChoreFreq(evt) {
 	// get the chore name from the modal window hidden input
 	var hiddenModalChore = $('#hidden-modal-chore').val();
 
+	var lookup = {
+		1: "Weekly",
+		2: "Bi-Weekly",
+		3: "Every 3 Weeks",
+		4: "Every 4 Weeks"
+	};
+
 	// ajax send modal window form values to render in selected chores table
 	$.post("/pass_chore_freq",
 		$('#chore-freq-form').serialize(),
 		function(result) {
 			$('#'+hiddenModalChore).html(
-				result.chore_name + '|' + result.week_freq + '|' + result.day)
+				result.chore_name + ', ' + lookup[result.week_freq] + ', ' + result.day)
 		})
 
 	// ajax send modal window form to main form
@@ -177,6 +184,20 @@ function removeChore(evt) {
 	var changedChorePotential = $("[name|='"+rCChore+"']")
 	changedChorePotential.removeClass('moved')
 };
+
+function onSubmitForm() {
+	if(document.pressed == 'CHORE ME')
+  		{
+		   document.house_pref_form.action ="/create_user_chores";
+		}
+  	else
+  	if(document.pressed == 'CHORE ME AGAIN')
+	  	{
+	    	document.house_pref_form.action ="/recreate_user_chores";
+	  	}
+  	return true;
+}
+$("#house_pref_form").on('submit', onSubmitForm)
 
 function renderPhones() {
 	// function to add same click events to dom originating elements

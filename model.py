@@ -15,7 +15,7 @@ class User(db.Model):
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=True)
     username = db.Column(db.String(64), nullable=True, unique=True)
     password = db.Column(db.String(64), nullable=True)
-    phone = db.Column(db.Integer, nullable=False)
+    phone = db.Column(db.String(12), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
     # define a relationship to House
@@ -99,7 +99,7 @@ class UserChore(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return "<UserChore user_chore_id=%s is_done=%s due_date=%s active=%s>" % (self.id, self.is_done, self.due_date, self.is_active)
+        return "<UserChore user_chore_id=%s is_done=%s due_date=%s active=%s>" % (self.id, self.is_done, self.due_date.strftime("%m/%d/%y"), self.is_active)
 
 
 
