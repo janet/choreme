@@ -81,7 +81,7 @@ class UserChore(db.Model):
 
     __tablename__ = "user_chore"
 
-    id  = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     chore_id = db.Column(db.Integer, db.ForeignKey('chore.id'), nullable=False)
     is_done = db.Column(db.Boolean, nullable=False, default=False)
@@ -123,6 +123,6 @@ if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave
     # you in a state of being able to work with the database directly.
 
-    from run import app
+    from server import app
     connect_to_db(app)
     print "Connected to DB."

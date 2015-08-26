@@ -27,7 +27,7 @@ MY_PHONE_NUMBER = os.environ['MY_PHONE_NUMBER']
  
 # adding specific numbers for personalized response
 callers = {
-   MY_PHONE_NUMBER : "you are the best programmer", 
+   MY_PHONE_NUMBER : "me", 
 }
 
 # my twilio phone number
@@ -40,7 +40,7 @@ MY_TWILIO_NUMBER = os.environ['MY_TWILIO_NUMBER']
 @app.route("/", methods=['GET'])
 def login():
     """Index route will be a login page requesting username and password"""
-    
+
     try:
         if session["user_id"] is None:
             return render_template("login.html")
@@ -116,6 +116,23 @@ def add_invited_user():
 
     return redirect('/calendar_view')
 
+@app.route("/process_texts", methods=['POST', 'GET'])
+def process_texts():
+    """Process text replies and update database with chore done."""
+
+    print "you got here"
+
+    from_number = request.form.get('From')
+    from_body = request.form.get('Body')
+
+    if from_body == "DONE":
+        User.query.filter(User.phone==from_number, User.userchore.due_date>yesterday, User.userchore).one()
+
+    print from_body
+
+
+
+    return redirect("/")
 
 @app.route("/create_house_pref", methods=['POST','GET'])
 def create_house_pref():
@@ -336,19 +353,19 @@ def recreate_user_chores():
     # remove any user_chores that were previously created for a future date
     inactivate_userchores = UserChore.query.filter(UserChore.due_date>=datetime.datetime.now()).all()
     for userchore in inactivate_userchores:
-        userchore.is_active = False # inactivate userchore
+        userchore.is_active = False # deactivate userchore
 
     # remove housechore from house
     for housechore in house.house_chores:
-        housechore.house_id = None # inactivate previous housechores_list
+        housechore.house_id = None # deactivate previous housechores_list
 
     # update House start_date
     House.query.get(house_id).start_date = datetime.datetime.now()
 
 
     # commit changes: adding/removing housemates based on new inputs
-    # inactivating user_chores that were previously created for a future date
-    # and updating start date
+    # deactivating user_chores that were previously created for a future date
+    # deactivate old housechores and updating start date
     db.session.commit()
 
     # create new house chore
@@ -456,7 +473,7 @@ def render_house_chores():
     for user in house.users:
         for user_chore in UserChore.query.filter(UserChore.is_active==True, UserChore.user_id==user.id).all():
             print user_chore
-            if user_chore.due_date.strftime("%Y-%m-%d") in user_chores_dict:
+            if user_chore.due_date.strftime("%Y-%m-%d") in user_chores_dict: 
                 user_chores_dict[user_chore.due_date.strftime("%Y-%m-%d")].append((user_chore.chore.name, user_chore.user.username, user_chore.is_done, user_chore.id))
             else:
                 user_chores_dict[user_chore.due_date.strftime("%Y-%m-%d")] = [(user_chore.chore.name, user_chore.user.username, user_chore.is_done, user_chore.id)]
@@ -548,6 +565,7 @@ def logout():
     session['house_id'] = None
 
     return redirect('/')
+
 
 ############################################################################## 
 

@@ -7,7 +7,7 @@ $(document).ready(
 			url: '/render_house_chores', 
 			method: "POST",
 			success: function(result) {
-				// reparse the results from json from object {date: (chore name, username, is_done, id)}
+				// reparse the results from json from object {date: [chore name, username, is_done, id]}
 				// to array of object [{date: date, chore: chore, etc}, {date:date, chore: chore, etc}]
 				// console.log(result)
 
@@ -57,16 +57,16 @@ function renderCalendar(data){
 			click: function(target) {
 				console.log(target);
 				// remove the gray highlight from any other selected calendar days on click
-				$('.selected_day').removeClass('selected_day');
+				$('.selected-day').removeClass('selected-day');
 
 				// reset the chores that display on click
 				$('#render-house-chores').html("");
 
 				// add the gray highlight on click
-				$(target.element).toggleClass('selected_day');
+				$(target.element).toggleClass('selected-day');
 
 				// when user clicks on a day, render the assigned chores
-				if ($(target.element).hasClass('selected_day')) {
+				if ($(target.element).hasClass('selected-day')) {
 					for (var rcEventsIndex in target.events){
 						// create a div to put the chores to render on day click
 						var rcChoreDiv = $('<div>');
@@ -86,11 +86,16 @@ function renderCalendar(data){
 			}
 		},
 		doneRendering: function() {
-			console.log('this would be a fine place to attach custom event handlers.');
+			// add css class to days with events
+			for (var eventIndex in this.eventsThisInterval){
+				$('.calendar-day-'+this.eventsThisInterval[eventIndex].date).addClass('event-day')
+			}
+			;
 		}
 	});
-	// on the calendar instance mark the days that have scheduled chores
-	
-
-
 }
+
+
+// function colorChoreDays(data) {
+// 	for (var day in data.keys)
+// }

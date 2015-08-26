@@ -82,6 +82,10 @@
 					weeks<br>
 				<input type="submit" name="recreate_chores" onclick="document.pressed=this.value" value="CHORE ME AGAIN">
 				This will delete all future chores of the current schedule.
+				<br>
+				Or go back 
+				<input type="button" onclick="location.href='/calendar_view';" value="Calendar View"> 
+				<input type="button" onclick="location.href='/personal_view';" value="Personal View">
 			{% else %}
 				Schedule out for: 
 				<input type="number" min="1" max="52" name="num_weeks" value="{{ house_num_weeks }}"required>

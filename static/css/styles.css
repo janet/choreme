@@ -15,7 +15,7 @@
 
 }
 
-.selected_day{
+.selected-day{
 	background-color: lightgray;
 }
 
@@ -28,4 +28,7 @@
 	margin: 10px;
 }
 
+.event-day {
+	background-color: lightpink;
+}
 
