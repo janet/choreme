@@ -30,12 +30,23 @@ function addPhone(evt) {
 
 	var housemate_phone_label = $('<label>').html('Housemate phone: ').addClass('col-xs-2','control-label')
 	// add the new input element to the div right below admin phone
-	$('#phone-inputs').append($('<label>').html('Housemate phone: ').addClass('col-xs-2','control-label'))
-	// add the new input element to the div right below admin phone
-	$('#phone-inputs').append(new_phone_input)
-	// add the remove button next to the new phone input
-	$('#phone-inputs').append(remove_phone_button)
-	// add div form group class for styling around each label, input and button
+	$('#phone-inputs').append('<div class=row>' + 
+							   "<label class='col-xs-2 control-label'>Housemate phone:</label>" +
+							   "<div class='col-xs-2'>" +
+							   "<input name='housemate_phone"+ +housemate_count + "' id='housemate_phone"+ +housemate_count + "' placeholder= '+15105551234' required class='form-control'>" +
+							   "</div>" + 
+							   "<button name='remove_phone_button'class='btn btn-default'>Remove</button>" +
+							   '</div>');
+
+	for (var i = 0; i < $("[name|='remove_phone_button']").length; i++) {
+		$($("[name|='remove_phone_button']")[i]).on('click', removePhone)
+	};
+	// // add the new input element to the div right below admin phone
+	// $('#phone-inputs').append(new_phone_input)
+	// // add the remove button next to the new phone input
+	// $('#phone-inputs').append(remove_phone_button)
+	// // add div form group class for styling around each label, input and button
+
 
 
 	// count number of housemates and put in hidden input

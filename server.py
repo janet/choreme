@@ -442,7 +442,7 @@ def invite_housemates():
     housemates_list = User.query.filter(User.house_id==session['house_id'], User.is_admin==0).all()
 
     for housemate in housemates_list:
-        message = "Chore Me Invitation :) https://35347a65.ngrok.io/"+str(housemate.id)
+        message = "Chore Me Invitation :) https://efb13769.ngrok.io/"+str(housemate.id)
         client.messages.create(
             # to=housemate.phone, 
             to=MY_PHONE_NUMBER, #using this for testing purposes
@@ -547,7 +547,6 @@ def process_login():
             # also add logged in user's house_id to allow easy save of chore freq in house pref
             session['house_id'] = user.house.id
             flash("Logged in")
-            flash("user_id: %s house_id: %s" % (session['user_id'], session['house_id']))
             return redirect('/personal_view')
 
 

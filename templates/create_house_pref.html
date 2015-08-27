@@ -1,54 +1,57 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Create House Preferences</h2>
 
 <!-- if we have previously created a schedule, submit to the reschedule route, otherwise go to create_user_chores -->
-	<form method="POST" name="house_pref_form" id="house_pref_form" class="form-horizontal">
-	    <h3>Add Your House</h3>
-	    <div class="form-group">
-	    	<label class="col-xs-2 control-label">House Name:</label>
+	<form method="POST" name="house_pref_form" id="house_pref_form" class="form-signin">
+		<h2 class="form-signin-heading text-muted">Create House Preferences</h2>
+	    <div class="row">
+	    	<label class="col-xs-2 control-label text-muted">House:</label>
 	    	{% if house_name %}
-		    	<p class="col-xs-6 form-control-static" name="house_name">{{ house_name }}</p>
+		    	<p class="col-xs-6 form-control-static" name="house_name">
+		    		{{ house_name }}
+		    	</p>
 	    	{% else %}
 		    	<div class="col-xs-6">
 		    		<input type="text" name="house_name" placeholder="Monkey House" required class="form-control">
 		    	</div>
 		    {% endif %}
+		    <div class= "col-xs-4">
+		    </div>
 		</div>
 
-	    <h3>House Members:</h3>
-	    <div class="form-group">
+	    <h3 class="form-signin-heading text-muted">Housemates</h3>
+	    <div class="row">
 	    	<label class="col-xs-2 control-label">Admin Phone:</label> 
 	    	<p name="admin_phone" class="col-xs-6 form-control-static">{{ admin_phone }}</p>
-	    </div>
+		</div>
 	    	<div id="phone-inputs">
 	    		{% if house_name %}
 	    			{% for housemate in housemates_list %}
-	    				<div class="form-group">
-	    				<label class="col-xs-2 control-label">Housemate phone:</label>
-	    				<div class="col-xs-6">
-	    					<input name="housemate_phone{{ loop.index }}" id="housemate_phone{{ loop.index }}" type="text" value="{{ housemate.phone }}" required class="form-control">
-	    				</div>
-	    				<button class="btn btn-default" name="remove_phone_button">Remove</button>
-	    				</div>
+	    				<div class="row">
+		    				<label class="col-xs-2 control-label">Housemate phone:</label>
+		    				<div class="col-xs-2">
+		    					<input name="housemate_phone{{ loop.index }}" id="housemate_phone{{ loop.index }}" type="text" value="{{ housemate.phone }}" required class="form-control">
+		    				</div>
+		    				<button class="btn btn-default" name="remove_phone_button">Remove</button>
+	    				</div>	
 
 	    			{% endfor %}
 	    				
 	    		{% endif %}
 	    	</div>
 	    	<button class="btn btn-default" id="add-phone-button" name="add-phone-button">add Housemate</button>
-	    	<br>Housemate Count<input type="text" name="housemate_count" id="housemate_count">
+	    	<input type="hidden" name="housemate_count" id="housemate_count">
 
-	    <h3>Choose Your Chores</h3>
-	    	Select From Table<br>
+	    <h3 class="form-signin-heading text-muted">Choose Your Chores</h3>
+	    	<h4 class="form-signin-heading text-muted">Select From Table</h4>
 			    {% for chore in chore_objs %}
 				    <ul id="chore-potentials">
 				    	<li>{{ chore.name }}</li>
 				    </ul>
 			    {% endfor %}
 
-			Selected Table<br>
+			<h4 class="form-signin-heading text-muted">Selected Table</h4>
 				<ul id="chore-selected">
 					{% set lookup = {
 									1: "Weekly",
@@ -73,11 +76,11 @@
 		<div id="chore-selected-inputs">
 			{% if house_name %}
 				{% for house_chore in housechores_list %}
-					<input name="chores{{ loop.index }}", id="hidden{{ house_chore.chore.name }}", value="{{ house_chore.chore.name }}|{{ house_chore.week_freq }}|{{ house_chore.day }}" type="text"> 
+					<input name="chores{{ loop.index }}", id="hidden{{ house_chore.chore.name }}", value="{{ house_chore.chore.name }}|{{ house_chore.week_freq }}|{{ house_chore.day }}" type="hidden"> 
 				{% endfor %}
 			{% endif %}
 		</div>
-		<input type="text" name="hidden_count_of_chores" id="hidden_count_of_chores">
+		<input type="hidden" name="hidden_count_of_chores" id="hidden_count_of_chores">
 
 		<br>Please select a frequency for each chore<br>
 

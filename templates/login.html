@@ -1,30 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Login Page</h2>
-	<form action="/process_login" method="POST" class="form-horizontal">
-		<div class="form-group">
-			<label class="col-xs-2">Username</label>
-			<div class="col-xs-6">
-				<input type="text" name="username" required placeholder="username" class="form-control">
+
+	<form action="/process_login" method="POST" class="form-signin">
+		<h2 class="form-signin-heading text-muted">Sign In</h2>
+			<div class="row">
+				<div class="col-xs-6">
+					<input type="text" name="username" required placeholder="username" class="form-control">
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-xs-2">Password</label>
-			<div class="col-xs-6">
-				<input type="password" name="password" required placeholder="password" class="form-control">
+			<div class="row">
+				<div class="col-xs-6">
+					<input type="password" name="password" required placeholder="password" class="form-control">
+				</div>
+			</div>	
+			<div class="row">
+				<div class="col-xs-6">
+					<input type="submit" value="Sign In" class="btn btn-primary btn-block">
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-xs-offset-2 col-xs-10">
-				<input type="submit" value="Login" class="btn btn-primary">
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-xs-offset-2 col-xs-10">
-				<a href="/register">New? Create a house and invite housemates</a>
-			</div>
-		</div>
+			<a href="/register">New? Create a house and invite housemates</a>
 	</form>
 
 {% endblock %}

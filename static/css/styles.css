@@ -24,10 +24,6 @@
 	text-decoration: line-through; 
 }
 
-.login-form {
-	margin: 10px;
-}
-
 .event-day {
 
 }
@@ -40,3 +36,10 @@
 	height: 6%;
 	width: 6%;
 }
+/*
+.container-fluid {
+	background-image:  url('/static/img/Vacuuming-sam.jpg');
+	background-size: 1920px 1080px;
+ 	background-repeat:no-repeat;
+ 	display: compact;
+}*/

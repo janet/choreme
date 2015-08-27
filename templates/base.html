@@ -19,6 +19,7 @@
     <img id="logo" src="http://cdn.flaticon.com/png/256/40629.png">
     <div>Chore Me</div> 
   </div>
+
       
     <!-- If user logged in, display logout button -->
       {% if session['user_id'] %}
@@ -31,21 +32,19 @@
       {% endif %}
 
       {% with messages = get_flashed_messages() %}
-      <div class="row"
         {% if messages %}
-          <ul class=flashes>
             {% for message in messages %}
-              <li>{{ message }}</li>
+              <div class="row">
+                <div class="alert alert-warning" role="alert">{{ message }}
+                </div>
+              </div>
             {% endfor %}
-          </ul>
         {% endif %}
-      </div>
       {% endwith %}
       
     <hr>
-<div class="container"> 
+
   {% block content %} put your content here {% endblock %}
 </div>
-
 </body>
 </html>
