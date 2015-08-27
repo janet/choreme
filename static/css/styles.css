@@ -29,6 +29,14 @@
 }
 
 .event-day {
-	background-color: lightpink;
+
 }
 
+.img-format {
+	display: inline;
+}
+
+#logo {
+	height: 6%;
+	width: 6%;
+}

@@ -442,7 +442,7 @@ def invite_housemates():
     housemates_list = User.query.filter(User.house_id==session['house_id'], User.is_admin==0).all()
 
     for housemate in housemates_list:
-        message = "Chore Me Invitation :) Click here for amazingness!"
+        message = "Chore Me Invitation :) https://35347a65.ngrok.io/"+str(housemate.id)
         client.messages.create(
             # to=housemate.phone, 
             to=MY_PHONE_NUMBER, #using this for testing purposes

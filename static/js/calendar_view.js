@@ -89,6 +89,10 @@ function renderCalendar(data){
 			// add css class to days with events
 			for (var eventIndex in this.eventsThisInterval){
 				$('.calendar-day-'+this.eventsThisInterval[eventIndex].date).addClass('event-day')
+				// console.log('/static/img/'+this.eventsThisInterval[eventIndex].chore+'.png')
+				$('.calendar-day-'+this.eventsThisInterval[eventIndex].date).append(
+					$('<img>').attr('src', '/static/img/'+this.eventsThisInterval[eventIndex].chore+'.png').
+						addClass('img-format'))
 			}
 			;
 		}

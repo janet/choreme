@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Calendar View</h2>
+<div class="row">
+	<h2>Calendar View</h2>
+</div>
+	<ul id="user_chores">
+	</ul>
+<div class="row">
+	<div class="col-md-4"></div>
+	<div class="col-md-4">
+		<div id="calendar"></div>
+		<div id="render-house-chores"></div>
+	</div>
+	<div class="col-md-4"></div>
+</div>
 
-<ul id="user_chores">
-</ul>
-
-<div id="calendar"></div>
-
-<div id="render-house-chores"></div>
-
-<input type="button" onclick="location.href='/personal_view';" value="Personal View">
-<input type="button" onclick="location.href='/create_house_pref';" value="House Pref"> 
-
+<div class="row">
+	<input type="button" onclick="location.href='/personal_view';" value="Personal View">
+	<input type="button" onclick="location.href='/create_house_pref';" value="House Pref"> 
+</div>
 
 <script src="/static/js/calendar_view.js"></script>
 
