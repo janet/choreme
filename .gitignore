@@ -1,4 +1,5 @@
 env
 secrets.sh
 *.pyc
+static/.*
 ngrok*

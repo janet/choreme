@@ -19,20 +19,27 @@ function addPhone(evt) {
 		required: true
 	});
 
-	// create new button element to remove phones and put an eventlistener on it
-	var remove_phone_button = $('<button>').attr('name', 'remove_phone_button').html("Remove").on('click', removePhone)
+	// add class for styling
+	new_phone_input.addClass('form-control')
 
+	// create new button element to remove phones and put an eventlistener on it
+	var remove_phone_button = $('<button>').attr('name', 'remove_phone_button')
+											.html("Remove")
+											.on('click', removePhone)
+											.addClass('btn btn-default')
+
+	var housemate_phone_label = $('<label>').html('Housemate phone: ').addClass('col-xs-2','control-label')
 	// add the new input element to the div right below admin phone
-	$('#phone-inputs').append($('<span>').html('Housemate phone: '))
+	$('#phone-inputs').append($('<label>').html('Housemate phone: ').addClass('col-xs-2','control-label'))
 	// add the new input element to the div right below admin phone
 	$('#phone-inputs').append(new_phone_input)
 	// add the remove button next to the new phone input
 	$('#phone-inputs').append(remove_phone_button)
-	// add a break after each phone input
-	$('#phone-inputs').append($('<br>'))
+	// add div form group class for styling around each label, input and button
+
 
 	// count number of housemates and put in hidden input
-	$('#housemate_count').val($('#phone-inputs span').length)
+	$('#housemate_count').val($('#phone-inputs label').length)
 }
 
 // event listener for add phone button to create a new input field

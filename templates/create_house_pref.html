@@ -4,34 +4,41 @@
 <h2>Create House Preferences</h2>
 
 <!-- if we have previously created a schedule, submit to the reschedule route, otherwise go to create_user_chores -->
-	<form method="POST" name="house_pref_form" id="house_pref_form">
+	<form method="POST" name="house_pref_form" id="house_pref_form" class="form-horizontal">
 	    <h3>Add Your House</h3>
-	    	House Name: 
+	    <div class="form-group">
+	    	<label class="col-xs-2 control-label">House Name:</label>
 	    	{% if house_name %}
-		    	<span name="house_name">{{ house_name }}</span><br>
+		    	<p class="col-xs-6 form-control-static" name="house_name">{{ house_name }}</p>
 	    	{% else %}
-		    	<input type="text" name="house_name" placeholder="Monkey House" required><br>
+		    	<div class="col-xs-6">
+		    		<input type="text" name="house_name" placeholder="Monkey House" required class="form-control">
+		    	</div>
 		    {% endif %}
-	    <br>
+		</div>
 
 	    <h3>House Members:</h3>
-	    	Admin Phone: 
-	    	<span name="admin_phone">{{ admin_phone }}</span><br>
+	    <div class="form-group">
+	    	<label class="col-xs-2 control-label">Admin Phone:</label> 
+	    	<p name="admin_phone" class="col-xs-6 form-control-static">{{ admin_phone }}</p>
+	    </div>
 	    	<div id="phone-inputs">
 	    		{% if house_name %}
 	    			{% for housemate in housemates_list %}
-	    				<span>Housemate phone: </span>
-	    				<input name="housemate_phone{{ loop.index }}" id="housemate_phone{{ loop.index }}" type="text" value="{{ housemate.phone }}" required><!-- 
-	    				 --><button name="remove_phone_button">Remove</button>
-	    				<br>
+	    				<div class="form-group">
+	    				<label class="col-xs-2 control-label">Housemate phone:</label>
+	    				<div class="col-xs-6">
+	    					<input name="housemate_phone{{ loop.index }}" id="housemate_phone{{ loop.index }}" type="text" value="{{ housemate.phone }}" required class="form-control">
+	    				</div>
+	    				<button class="btn btn-default" name="remove_phone_button">Remove</button>
+	    				</div>
 
 	    			{% endfor %}
 	    				
 	    		{% endif %}
 	    	</div>
-	    	<button id="add-phone-button" name="add-phone-button">add Housemate</button>
+	    	<button class="btn btn-default" id="add-phone-button" name="add-phone-button">add Housemate</button>
 	    	<br>Housemate Count<input type="text" name="housemate_count" id="housemate_count">
-	    <br>
 
 	    <h3>Choose Your Chores</h3>
 	    	Select From Table<br>
