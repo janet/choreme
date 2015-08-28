@@ -431,8 +431,8 @@ def recreate_user_chores():
     # commit new user_chores
     db.session.commit()
 
-    return redirect("/calendar_view") # use this to conserve texts for testing
-    # return redirect("/invite_housemates")     
+    # return redirect("/calendar_view") # use this to conserve texts for testing
+    return redirect("/invite_housemates")     
 
 @app.route("/invite_housemates", methods=['POST','GET'])
 def invite_housemates():
@@ -444,8 +444,8 @@ def invite_housemates():
     for housemate in housemates_list:
         message = "Chore Me Invitation :) https://a9dc1625.ngrok.io/"+str(housemate.id)
         client.messages.create(
-            # to=housemate.phone, 
-            to=MY_PHONE_NUMBER, #using this for testing purposes
+            to=housemate.phone, 
+            # to=MY_PHONE_NUMBER, #using this for testing purposes
             from_=MY_TWILIO_NUMBER,
             body=message)
         resp = twilio.twiml.Response()

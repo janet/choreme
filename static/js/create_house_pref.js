@@ -95,6 +95,8 @@ function selectChore(evt) {
 	if ($(evt.target).is('button')) {
 		evt.preventDefault();
 
+		console.log($(this))
+
 		var chore = $($(evt.target).prev());
 
 		console.log(chore.html())
@@ -135,6 +137,10 @@ function selectChore(evt) {
 
 		$("#hidden_count_of_chores").val(hiddenChoreInput_count)
 	}	
+
+	else {
+		console.log($(this))
+	}
 
 }
 
@@ -259,7 +265,7 @@ function renderHouseChores() {
 	}
 
 	// add the disabled class to the button of the already selected housechore
-	var chorePotentialsArray = $("#chore-potentials td a")
+	var chorePotentialsArray = $("#chore-potentials td span")
 	var chorePotentialsLen = chorePotentialsArray.length
 
 	for (var i = 0; i < chorePotentialsLen; i++) {

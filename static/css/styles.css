@@ -82,6 +82,21 @@
 	display: flex;
 	justify-content: space-between;
 }
+
+.schedule-length {
+	display: flex;
+	align-items: center;
+}
+
+.admin-phone {
+	display: flex;
+	align-items: center;
+}
+
+.house-name {
+	display: flex;
+	align-items: center;
+}
 	/*
 	body {
 		background-image:  url('/static/img/Chores-sam.jpg');
