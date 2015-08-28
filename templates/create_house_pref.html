@@ -28,7 +28,7 @@
 	    	<div id="phone-inputs">
 	    		{% if house_name %}
 	    			{% for housemate in housemates_list %}
-	    				<div class="row">
+	    				<div class="row housemate-phone">
 		    				<label class="col-xs-2 control-label">Housemate phone:</label>
 		    				<div class="col-xs-2">
 		    					<input name="housemate_phone{{ loop.index }}" id="housemate_phone{{ loop.index }}" type="text" value="{{ housemate.phone }}" required class="form-control">

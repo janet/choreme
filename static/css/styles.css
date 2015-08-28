@@ -33,13 +33,50 @@
 }
 
 #logo {
-	height: 6%;
-	width: 6%;
+	background-color: white;
+	height: 30px;
+	width: 30px;
 }
-/*
-body {
-	background-image:  url('/static/img/Chores-sam.jpg');
-	background-size: 100%;
- 	background-repeat:no-repeat;
- 	height: 100%;
-}*/
+
+.rounded-top {
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0; 
+}
+
+.rounded-bottom {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.rounded-none {
+	border-radius: 0;
+}
+
+.housemate-phone {
+	display: flex;
+	align-items: center;
+}
+
+.mypage-header {
+	margin: 0;
+	background-color: black;
+	color: white;
+}
+
+.nav-tab-item {
+	color: white;
+	cursor: pointer;	
+}
+
+.header-contents {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+	/*
+	body {
+		background-image:  url('/static/img/Chores-sam.jpg');
+		background-size: 100%;
+	 	background-repeat:no-repeat;
+	 	height: 100%;
+	}*/

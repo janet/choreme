@@ -14,36 +14,44 @@
 </head>
 
 <body>
-  <div class="container-fluid">
-  <div class="row">
-    <img id="logo" src="http://cdn.flaticon.com/png/256/40629.png">
-    <div>Chore Me</div> 
-  </div>
-
+  <div class="mypage-header">
+    <div class="header-contents">
+    <div>
+      <img id="logo" class="img-circle" src="http://cdn.flaticon.com/png/256/40629.png">
+      <div>Chore Me</div> 
+    </div>
+      <input class="btn btn-primary pull-right" type="button" onclick="location.href='/logout';" value="Logout">
+    </div>
       
     <!-- If user logged in, display logout button -->
       {% if session['user_id'] %}
-        <div class="row">
-          <input class="btn btn-primary" type="button" onclick="location.href='/personal_view';" value="Personal View">
-          <input class="btn btn-primary" type="button" onclick="location.href='/calendar_view';" value="Calendar View">
-          <input class="btn btn-primary" type="button" onclick="location.href='/create_house_pref';" value="House Pref"> 
-          <input class="btn btn-primary pull-right" type="button" onclick="location.href='/logout';" value="Logout">
-        </div>
+        <ul class="nav nav-tabs">
+          <li role="presentation" class="active">
+            <a class="active nav-tab-item" href="/personal_view">Personal View
+            </a>
+          </li>
+          <li role="presentation">
+            <a class="nav-tab-item" href="/calendar_view">Calendar View
+            </a>
+          </li>
+          <li role="presentation">
+            <a class="nav-tab-item" href='/create_house_pref'>House Pref 
+            </a>
+          </li>
+        </ul>
+
       {% endif %}
 
       {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-              <div class="row">
-                <div class="alert alert-warning" role="alert">{{ message }}
-                </div>
+              <div class="alert alert-warning" role="alert">{{ message }}
               </div>
             {% endfor %}
         {% endif %}
       {% endwith %}
-      
-    <hr>
-
+  </div>
+  <div class="container-fluid">
   {% block content %} put your content here {% endblock %}
 </div>
 </body>

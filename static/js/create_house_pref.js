@@ -30,7 +30,7 @@ function addPhone(evt) {
 
 	var housemate_phone_label = $('<label>').html('Housemate phone: ').addClass('col-xs-2','control-label')
 	// add the new input element to the div right below admin phone
-	$('#phone-inputs').append('<div class=row>' + 
+	$('#phone-inputs').append('<div class="row housemate-phone">' + 
 							   "<label class='col-xs-2 control-label'>Housemate phone:</label>" +
 							   "<div class='col-xs-2'>" +
 							   "<input name='housemate_phone"+ +housemate_count + "' id='housemate_phone"+ +housemate_count + "' placeholder= '+15105551234' required class='form-control'>" +
