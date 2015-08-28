@@ -108,12 +108,12 @@ function selectChore(evt) {
 		'data-toggle': 'modal',
 		id: chore.html()
 	});
-	$("#chore-selected").append($('<li>').html(choreElement));
+	$("#chore-selected").append($('<tr>').html($('<td>').html(choreElement)));
 
 	// created remove button for chore selected
 	var liElement = $("#"+chore.html()).parent() // get li element of chore
 	
-	liElement.append($('<button>').attr('name', 'remove_chore_button').html("Remove").on('click', removeChore))
+	liElement.append('<button type="button" name= "remove_chore_button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>')
 
 	// count the number of chore selected inputs 
 	var hiddenChoreInput_count = ($('#chore-selected-inputs input').length +1)
@@ -122,7 +122,7 @@ function selectChore(evt) {
 		name: 'chores' + +hiddenChoreInput_count,
 		id: 'hidden'+chore.html(),
 		value: chore.html(),
-		type: 'text'
+		type: 'hidden'
 	});
 
 	$("#chore-selected-inputs").append(hiddenChoreInput);
@@ -131,7 +131,7 @@ function selectChore(evt) {
 }
 
 // event listener for when user clicks on chore-potentials
-$("#chore-potentials li").on('click', selectChore);
+$("#chore-potentials td").on('click', selectChore);
 
 function choreModal(evt) {
 	// function to populate modal window with that chore specific data
@@ -251,7 +251,7 @@ function renderHouseChores() {
 	}
 
 	// add the moved class for all housechores
-	var chorePotentialsArray = $("#chore-potentials li")
+	var chorePotentialsArray = $("#chore-potentials td a")
 	var chorePotentialsLen = chorePotentialsArray.length
 
 	for (var i = 0; i < chorePotentialsLen; i++) {

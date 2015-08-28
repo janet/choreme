@@ -37,9 +37,9 @@
 	width: 6%;
 }
 /*
-.container-fluid {
-	background-image:  url('/static/img/Vacuuming-sam.jpg');
-	background-size: 1920px 1080px;
+body {
+	background-image:  url('/static/img/Chores-sam.jpg');
+	background-size: 100%;
  	background-repeat:no-repeat;
- 	display: compact;
+ 	height: 100%;
 }*/

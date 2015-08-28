@@ -88,7 +88,7 @@ def add_admin_user():
 
     session['user_id'] = admin_user_id
     print session['user_id']
-    flash("session user_id: " + str(session['user_id']))
+    # flash("session user_id: " + str(session['user_id']))
 
     return redirect('/create_house_pref')
 
@@ -442,7 +442,7 @@ def invite_housemates():
     housemates_list = User.query.filter(User.house_id==session['house_id'], User.is_admin==0).all()
 
     for housemate in housemates_list:
-        message = "Chore Me Invitation :) https://efb13769.ngrok.io/"+str(housemate.id)
+        message = "Chore Me Invitation :) https://a9dc1625.ngrok.io/"+str(housemate.id)
         client.messages.create(
             # to=housemate.phone, 
             to=MY_PHONE_NUMBER, #using this for testing purposes
@@ -575,6 +575,6 @@ if __name__ == "__main__":
 
     connect_to_db(app)
 
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     app.run(debug=True)

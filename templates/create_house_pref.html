@@ -44,33 +44,51 @@
 	    	<input type="hidden" name="housemate_count" id="housemate_count">
 
 	    <h3 class="form-signin-heading text-muted">Choose Your Chores</h3>
-	    	<h4 class="form-signin-heading text-muted">Select From Table</h4>
-			    {% for chore in chore_objs %}
-				    <ul id="chore-potentials">
-				    	<li>{{ chore.name }}</li>
-				    </ul>
-			    {% endfor %}
+	    	
+	    	<div class="row">
+	    		<div class="col-xs-3">
+	    		<h4 class="form-signin-heading text-muted">Select From Table</h4>
 
-			<h4 class="form-signin-heading text-muted">Selected Table</h4>
-				<ul id="chore-selected">
-					{% set lookup = {
-									1: "Weekly",
-									2: "Bi-Weekly",
-									3: "Every 3 Weeks",
-									4: "Every 4 Weeks"
-									} 
-					%}
-					{% if house_name %}
-						{% for house_chore in housechores_list %}
-							<li>
-								<a href= "#", data-target= '#myModal', data-toggle= 'modal', id= '{{ house_chore.chore.name }}', class= "housechore">
-											{{ house_chore.chore.name }}, {{ lookup[house_chore.week_freq] }}, {{ house_chore.day }}<!-- 
-									 --></a><!-- 
-								 --><button name=	"remove_chore_button">Remove</button>
-							</li>
-						{% endfor %}
-					{% endif %}
-				</ul>
+					<table class="table table-striped table-bordered">
+						<tr>
+							<th>Potential Chores</th>
+						</tr>
+					    {% for chore in chore_objs %}
+						    <tr id="chore-potentials">
+						    	<td><a>{{ chore.name }}</a></td>
+						    </tr>
+					    {% endfor %}
+					</table>
+				</div>
+				<div class="col-xs-1"></div>
+				<div class="col-xs-3">
+				<h4 class="form-signin-heading text-muted">Selected Table</h4>
+					<table class="table table-striped table-bordered" id="chore-selected">
+						{% set lookup = {
+										1: "Weekly",
+										2: "Bi-Weekly",
+										3: "Every 3 Weeks",
+										4: "Every 4 Weeks"
+										} 
+						%}
+						<tr>
+							<th>Selected Chores</th>
+						</tr>
+						{% if house_name %}
+							{% for house_chore in housechores_list %}
+							<tr>
+								<td>
+									<a href= "#", data-target= '#myModal', data-toggle= 'modal', id= '{{ house_chore.chore.name }}', class= "housechore">
+												{{ house_chore.chore.name }}, {{ lookup[house_chore.week_freq] }}, {{ house_chore.day }}
+									</a>
+									<button type="button" name= "remove_chore_button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								</td>
+							</tr>
+							{% endfor %}
+						{% endif %}
+					</table>
+					</div>
+			</div>
 
 		<!-- div that is filled by clicks to the chore-potentials table with frequencies set by modal window -->
 		<div id="chore-selected-inputs">
@@ -134,7 +152,7 @@
 			      <option value="Saturday">Saturday</option>
 	    		</select> 
 	    		<br>
-	    		<input type="text" id="hidden-modal-chore" value="" name="chore">   		
+	    		<input type="hidden" id="hidden-modal-chore" value="" name="chore">   		
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
