@@ -6,10 +6,10 @@
 	<form action="/add_invited_user" method="POST" class="form-signin">
 		<h2 class="form-signin-heading text-muted">Sign Up</h2>
 			<div class="row">
-				<input type="text" name="username" placeholder="Username" required class="form-control">
+				<input type="text" name="username" placeholder="Username" required class="form-control rounded-top">
 			</div>
 			<div class="row">
-				<input type="password" placeholder="Password" name="password" required class="form-control">
+				<input type="password" placeholder="Password" name="password" required class="form-control rounded-none">
 			</div>
 	<!-- 			<div class="row">		
 					<input type="password" placeholder="Confirm Password" id="confirm_password" required class="form-control">
@@ -18,7 +18,7 @@
 	   			<input type="hidden" name="user_id" value= "{{ invited_user.id }}" class="form-control">
 	   		</div>
 			<div class="row">		
-				<input type="submit" value="Sign Up" class="btn btn-primary btn-block">
+				<input type="submit" value="Sign Up" class="btn btn-primary btn-block rounded-bottom">
 			</div>		
 	</form>
 </div>
