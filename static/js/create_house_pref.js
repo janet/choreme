@@ -271,5 +271,3 @@ function renderHouseChores() {
 
 
 
-
-

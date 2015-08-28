@@ -73,6 +73,10 @@
 	align-items: center;
 	justify-content: space-between;
 }
+
+.flash-messages {
+	border-radius: 0;
+}
 	/*
 	body {
 		background-image:  url('/static/img/Chores-sam.jpg');

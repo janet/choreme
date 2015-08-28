@@ -1,9 +1,9 @@
 $(document).ready(function() {
 	$.post('/render_personal_chores', function(result) {
-		console.log(result)
+		// console.log(result)
 
 		for (var user_chore in result) {
-			console.log(result[user_chore])
+			// console.log(result[user_chore])
 
 			var pc_count = ($('#personal_chores li').length +1)
 			

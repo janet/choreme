@@ -20,21 +20,23 @@
       <img id="logo" class="img-circle" src="http://cdn.flaticon.com/png/256/40629.png">
       <div>Chore Me</div> 
     </div>
-      <input class="btn btn-primary pull-right" type="button" onclick="location.href='/logout';" value="Logout">
+      {% if session['user_id'] %}
+      <input id="logout-button" class="btn btn-primary pull-right" type="button" onclick="location.href='/logout';" value="Logout">
+      {% endif %}
     </div>
       
     <!-- If user logged in, display logout button -->
       {% if session['user_id'] %}
         <ul class="nav nav-tabs">
-          <li role="presentation" class="active">
-            <a class="active nav-tab-item" href="/personal_view">Personal View
+          <li role="presentation" id="personal_tab">
+            <a class="nav-tab-item" href="/personal_view">Personal View
             </a>
           </li>
-          <li role="presentation">
+          <li role="presentation" id="calendar_tab">
             <a class="nav-tab-item" href="/calendar_view">Calendar View
             </a>
           </li>
-          <li role="presentation">
+          <li role="presentation" id="house_pref_tab">
             <a class="nav-tab-item" href='/create_house_pref'>House Pref 
             </a>
           </li>
@@ -45,7 +47,7 @@
       {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-              <div class="alert alert-warning" role="alert">{{ message }}
+              <div class="alert alert-warning flash-messages" role="alert">{{ message }}
               </div>
             {% endfor %}
         {% endif %}
@@ -54,5 +56,6 @@
   <div class="container-fluid">
   {% block content %} put your content here {% endblock %}
 </div>
+<script src="/static/js/base.js"></script>
 </body>
 </html>
