@@ -91,47 +91,55 @@ function removePhone(evt) {
 
 function selectChore(evt) {
 	// function to add chore-potential elements to the chore-selected table with a modal link
-	var chore = $(evt.target);
-
-	// if we've already moved this to being selected, don't do it again
-	if (chore.hasClass('moved')) {
-		return;
-	};
-	chore.addClass('moved');
-	chore.attr('name', chore.html())
-
-	// add click event listener on modal window link that will call a choreModal
-	var choreElement = $('<a>').html(chore.html()).on('click', choreModal);
-	choreElement.attr({
-		href: '#',
-		'data-target': '#myModal',
-		'data-toggle': 'modal',
-		id: chore.html()
-	});
-	$("#chore-selected").append($('<tr>').html($('<td>').html(choreElement)));
-
-	// created remove button for chore selected
-	var liElement = $("#"+chore.html()).parent() // get li element of chore
 	
-	liElement.append($('<button type="button" name= "remove_chore_button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>').on('click', removeChore))
+	if ($(evt.target).is('button')) {
+		evt.preventDefault();
 
-	// count the number of chore selected inputs 
-	var hiddenChoreInput_count = ($('#chore-selected-inputs input').length +1)
+		var chore = $($(evt.target).prev());
 
-	var hiddenChoreInput = $('<input>').attr({
-		name: 'chores' + +hiddenChoreInput_count,
-		id: 'hidden'+chore.html(),
-		value: chore.html(),
-		type: 'hidden'
-	});
+		console.log(chore.html())
 
-	$("#chore-selected-inputs").append(hiddenChoreInput);
+		// if we've already moved this to being selected, don't do it again
+		if ($(chore.next()).hasClass('disabled')) {
+			return;
+		};
+		$(chore.next()).addClass('disabled');
+		chore.attr('name', chore.html())
 
-	$("#hidden_count_of_chores").val(hiddenChoreInput_count)
+		// add click event listener on modal window link that will call a choreModal
+		var choreElement = $('<a>').html(chore.html()).on('click', choreModal);
+		choreElement.attr({
+			href: '#',
+			'data-target': '#myModal',
+			'data-toggle': 'modal',
+			id: chore.html()
+		});
+		$("#chore-selected").append($('<tr>').html($('<td>').html(choreElement)));
+
+		// created remove button for chore selected
+		var liElement = $("#"+chore.html()).parent() // get li element of chore
+		
+		liElement.append($('<button type="button" name= "remove_chore_button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>').on('click', removeChore))
+
+		// count the number of chore selected inputs 
+		var hiddenChoreInput_count = ($('#chore-selected-inputs input').length +1)
+
+		var hiddenChoreInput = $('<input>').attr({
+			name: 'chores' + +hiddenChoreInput_count,
+			id: 'hidden'+chore.html(),
+			value: chore.html(),
+			type: 'hidden'
+		});
+
+		$("#chore-selected-inputs").append(hiddenChoreInput);
+
+		$("#hidden_count_of_chores").val(hiddenChoreInput_count)
+	}	
+
 }
 
 // event listener for when user clicks on chore-potentials
-$("#chore-potentials td").on('click', selectChore);
+$(".add-chore-button").on('click', selectChore);
 
 function choreModal(evt) {
 	// function to populate modal window with that chore specific data
@@ -200,7 +208,7 @@ function removeChore(evt) {
 
 	// remove the styling on previously selected chores in chore-potentials and allow for re-select
 	var changedChorePotential = $("[name|='"+rCChore+"']")
-	changedChorePotential.removeClass('moved')
+	$(changedChorePotential.next()).removeClass('disabled')
 };
 
 function onSubmitForm() {
@@ -250,13 +258,13 @@ function renderHouseChores() {
 		housechoreArray.push($($('#chore-selected a')[i]).attr('id'));
 	}
 
-	// add the moved class for all housechores
+	// add the disabled class to the button of the already selected housechore
 	var chorePotentialsArray = $("#chore-potentials td a")
 	var chorePotentialsLen = chorePotentialsArray.length
 
 	for (var i = 0; i < chorePotentialsLen; i++) {
 		if ($.inArray($(chorePotentialsArray[i]).html(), housechoreArray) > -1){
-			$(chorePotentialsArray[i]).addClass('moved');
+			$($(chorePotentialsArray[i]).next()).addClass('disabled');
 			$(chorePotentialsArray[i]).attr('name', $(chorePotentialsArray[i]).html())
 		}
 	}

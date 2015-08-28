@@ -55,13 +55,20 @@
 						</tr>
 					    {% for chore in chore_objs %}
 						    <tr id="chore-potentials">
-						    	<td><a>{{ chore.name }}</a></td>
+						    	<td>
+						    		<div class="chore-potentials-row">
+							    		<a>{{ chore.name }}</a>
+							    		<button type="button" name= "add_chore_button" class="btn btn-sm add-chore-button">
+							    			<span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
+							    		</button>
+							    	</div>
+						    	</td>
 						    </tr>
 					    {% endfor %}
 					</table>
 				</div>
 				<div class="col-xs-1"></div>
-				<div class="col-xs-3">
+				<div class="col-xs-4">
 				<h4 class="form-signin-heading text-muted">Selected Table</h4>
 					<table class="table table-striped table-bordered" id="chore-selected">
 						{% set lookup = {

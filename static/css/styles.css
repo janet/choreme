@@ -77,6 +77,11 @@
 .flash-messages {
 	border-radius: 0;
 }
+
+.chore-potentials-row {
+	display: flex;
+	justify-content: space-between;
+}
 	/*
 	body {
 		background-image:  url('/static/img/Chores-sam.jpg');
