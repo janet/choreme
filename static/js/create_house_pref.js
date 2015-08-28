@@ -8,7 +8,7 @@ function addPhone(evt) {
 	evt.preventDefault();
 
 	// create housemate count to add to ids and input names
-	var housemate_count = ($('#phone-inputs span').length +1)
+	var housemate_count = ($('#phone-inputs label').length +1)
 
 	// create new input element for a housemate phone number
 	var new_phone_input = $('<input>').attr({
@@ -236,10 +236,10 @@ function renderPhones() {
 	// that come from the database when schedule is already created
 
 	// create housemate count to add to ids and input names
-	var housemate_count = ($('#phone-inputs span').length +1)	
+	var housemate_count = ($('#phone-inputs label').length +1)	
 
 	// count number of housemates and put in hidden input
-	$('#housemate_count').val($('#phone-inputs span').length)
+	$('#housemate_count').val($('#phone-inputs label').length)
 
 	// add event listener to remove_phone_button for dom originating elements
 	$('button[name="remove_phone_button"]').on('click', removePhone)
