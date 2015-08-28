@@ -113,7 +113,7 @@ function selectChore(evt) {
 	// created remove button for chore selected
 	var liElement = $("#"+chore.html()).parent() // get li element of chore
 	
-	liElement.append('<button type="button" name= "remove_chore_button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>')
+	liElement.append($('<button type="button" name= "remove_chore_button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>').on('click', removeChore))
 
 	// count the number of chore selected inputs 
 	var hiddenChoreInput_count = ($('#chore-selected-inputs input').length +1)
