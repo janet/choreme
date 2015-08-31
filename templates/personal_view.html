@@ -1,16 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="personal-view">
+	<h2>Personal View</h2>
 
-<h2>Personal View</h2>
+	<form id='chore_done' action='/chore_done'>
+	<div class="row">
+		<div class="col-xs-5">
+			<table class="table" id="personal_chores">
+				<tbody>
+					<tr>
+						<th>Done</th>
+						<th>Chore</th>
+						<th>Due</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<input name='hidden_personal_chore_input' id='hidden_personal_chore_input'>
+	</form>
 
-<form id='chore_done' action='/chore_done'>
-<ul id="personal_chores"></ul>
-<input name='hidden_personal_chore_input' id='hidden_personal_chore_input'>
-</form>
+	<input type="button" onclick="location.href='/calendar_view';" value="Calendar View"> 
+	<input type="button" onclick="location.href='/create_house_pref';" value="House Pref"> 
 
-<input type="button" onclick="location.href='/calendar_view';" value="Calendar View"> 
-<input type="button" onclick="location.href='/create_house_pref';" value="House Pref"> 
-
-<script src="/static/js/personal_view.js"></script>
+	<script src="/static/js/personal_view.js"></script>
+</div>
 
 {% endblock %}

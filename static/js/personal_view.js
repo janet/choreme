@@ -5,22 +5,24 @@ $(document).ready(function() {
 		for (var user_chore in result) {
 			// console.log(result[user_chore])
 
-			var pc_count = ($('#personal_chores li').length +1)
+			var pc_count = ($('#personal_chores td').length +1)
 			
-			// create list element for each chore
-			$('#personal_chores').append($('<li>').html(
-				user_chore + ': ' + 
-				result[user_chore][0][0] + ': ' + // chore name
-				result[user_chore][0][1] // chore is_done
+			// create table row cell element for each chore
+			$('#personal_chores').append($('<tr>').html(
+				"<td>" + 
+					"<input name='pc" + +pc_count +  
+							"' id='" + result[user_chore][0][2] + "' " + // user_chore.id 
+							"type='checkbox' " +
+							"value='" + result[user_chore][0][2] + "' " +
+							"class='css-checkbox'" + 
+					">" +
+					"<label for='" + result[user_chore][0][2] + "'" +
+							"class='css-label'" +
+					"></label>" +
+				"</td>" + 
+				"<td>" + result[user_chore][0][0] + "</td>" + // chore name	
+				"<td>" + user_chore + "</td>" // chore due_date
 			));
-
-			// create checkbox input after each chore list element
-			$('#personal_chores').append($('<input>').attr({
-				name: 'pc' + +pc_count,
-				id: result[user_chore][0][2], // user_chore.id
-				type: 'checkbox',
-				value: result[user_chore][0][2], // user_chore.id
-			}));		
 
 			// if is_done is false, checkbox should not be checked, otherwise check it
 			if (result[user_chore][0][1] === false) {
