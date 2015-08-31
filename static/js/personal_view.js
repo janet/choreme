@@ -8,7 +8,7 @@ $(document).ready(function() {
 			var pc_count = ($('#personal_chores td').length +1)
 			
 			// create table row cell element for each chore
-			$('#personal_chores').append($('<tr>').html(
+			$('#personal_chores tbody').append($('<tr>').html(
 				"<td>" + 
 					"<input name='pc" + +pc_count +  
 							"' id='" + result[user_chore][0][2] + "' " + // user_chore.id 

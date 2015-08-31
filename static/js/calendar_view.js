@@ -68,17 +68,31 @@ function renderCalendar(data){
 				// when user clicks on a day, render the assigned chores
 				if ($(target.element).hasClass('selected-day')) {
 					for (var rcEventsIndex in target.events){
-						// create a div to put the chores to render on day click
-						var rcChoreDiv = $('<div>');
+						// create a table to put the chores to render on day click
+						var rcChoreDiv = $('<tr>');
 
 						// put the chore, assignedTo and is_done in the div
 						rcChoreDiv.html(
-							target.events[rcEventsIndex].chore + ' ' +
-							target.events[rcEventsIndex].assignedTo + ' ' +
-							target.events[rcEventsIndex].is_done)
+							'<td>' +
+								target.events[rcEventsIndex].chore + 
+							'</td>' +
+							'<td>' +
+								target.events[rcEventsIndex].assignedTo + 
+							'</td>' +
+							'<td>' +
+								target.events[rcEventsIndex].is_done +
+							'</td>'
+							)
 
 						$('#render-house-chores').append(rcChoreDiv)
 					}
+					$('#render-house-chores').prepend(
+						'<tr>' +
+							'<th>Chore</th>' +
+							'<th>Assigned</th>' +
+							'<th>Done</th>' +
+						'</tr>'
+						)
 				}
 			},
 			onMonthChange: function(month) {
