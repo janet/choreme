@@ -37,22 +37,20 @@ $(document).ready(function() {
 
 			    if($(this).is(':checked'))
 			    {
-			        alert("checked");
 			        $('#hidden_personal_chore_input').val($(this).attr('id'));
 			        $.post("/chore_done",
 			        	$('#chore_done').serialize(),
 			        	function(result){
-			        		alert("updated database with checked");
+			        		;
 			    		})
 			   	}	
 			    else
 			    {
-			    	alert("unchecked");
 			        $('#hidden_personal_chore_input').val($(this).attr('id'));
 			    	$.post("/chore_undone",
 			        	$('#chore_done').serialize(),
 			        	function(result){
-			        		alert("updated database with unchecked");
+			        		;
 			    		})
 			    }    
 

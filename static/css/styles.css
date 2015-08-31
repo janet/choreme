@@ -1,35 +1,37 @@
+#calendar .clndr-controls {
+	width: 440px;
+	display: flex;
+	justify-content: space-between;
+	font-size: medium;
+}
 #calendar table {
-	border: 1px solid gray;
+	margin-top: 5px;
+	border: 1px solid;
+	border-color: #549FAB;
 }
 
 #calendar table td {
-	border: 1px solid gray;
-	padding: 3px 3px 20px 20px;
+	border: 1px solid;
+	border-color: #549FAB;
+	padding: 6px 6px 40px 40px;
 	text-align: right;
 }
 
+
 #calendar table thead td {
-	background-color: lightgray;
+	background-color: #549FAB;
 	padding: 3px;
 	text-align: center;
+	color: white;
 
+}
+
+#calendar .day-contents {
+	color: #256078;
 }
 
 .selected-day{
-	background-color: lightgray;
-}
-
-.moved { 
-	color: gray; 
-	text-decoration: line-through; 
-}
-
-.event-day {
-
-}
-
-.img-format {
-	display: inline;
+	background-color: #FFF8B8;
 }
 
 #logo {
@@ -95,14 +97,14 @@
 
 .house-name {
 	display: flex;
-	align-items: calendarter;
+	align-items: center;
 }
 	
 .calendar-view {
-	background-image:  url('/static/img/Chores-polaroid-sam.jpg');
+	/*background-image:  url('/static/img/Chores-polaroid-sam.jpg');*/
 	background-size: contain;
  	background-repeat:no-repeat;
- 	background-position: top center;
+ 	background-position: top right;
  	height: 100%;
 }
 
@@ -114,8 +116,35 @@
  	height: 100%;
 }
 
-.calendar-previous-button {
-	
+.clndr-control-button {
+	background-color: #256078;
+	border-color: #256078;	
+	cursor: pointer;
+	border-radius: 4px;
+	color: white;
+	padding: 2px 5px;
+	font-size: 14px;
+}
+
+.clndr-controls .month {
+	font-style: oblique;
+	font-weight: bold;
+}
+
+.calendar-view h2 {
+	color: #263248;
+}
+
+.personal-view h2 {
+	color: #263248;
+}
+
+#house_pref_form h2 {
+	color: #263248;
+}
+
+#house_pref_form h3 {
+	color: #263248;
 }
 
 .nav>li>a:hover {

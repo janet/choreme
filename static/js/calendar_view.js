@@ -100,6 +100,3 @@ function renderCalendar(data){
 }
 
 
-// function colorChoreDays(data) {
-// 	for (var day in data.keys)
-// }
