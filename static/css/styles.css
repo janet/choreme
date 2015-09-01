@@ -1,3 +1,8 @@
+.clndr-table {
+	table-layout: fixed;
+	width: 464px;
+	height: 361px;
+}
 #calendar .clndr-controls {
 	width: 440px;
 	display: flex;
@@ -13,8 +18,10 @@
 #calendar table td {
 	border: 1px solid;
 	border-color: #549FAB;
-	padding: 6px 6px 40px 40px;
+	/*padding: 6px 6px 40px 40px;*/
 	text-align: right;
+/*	height: 70px;
+	width: 70px;*/
 }
 
 
@@ -28,6 +35,8 @@
 
 #calendar .day-contents {
 	color: #256078;
+	display: flex;
+	justify-content: flex-end;
 }
 
 .selected-day{
@@ -178,7 +187,7 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
 }
 						
 label.css-label {
-	background-image:url(http://csscheckbox.com/checkboxes/u/csscheckbox_8296afe552855ef36542a71269acb434.png);
+	background-image:url('/static/img/checkboxes.png');
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -188,3 +197,13 @@ label.css-label {
 }
 
 /* end of blue checkbox */
+
+.img-format {
+	width: 75%;
+
+}
+.day {
+	height: 70px;
+	width: 70px;
+	valign: top;
+}

@@ -80,7 +80,7 @@ function renderCalendar(data){
 								target.events[rcEventsIndex].assignedTo + 
 							'</td>' +
 							'<td>' +
-								target.events[rcEventsIndex].is_done +
+								doneLookup[target.events[rcEventsIndex].is_done] +
 							'</td>'
 							)
 
@@ -108,9 +108,11 @@ function renderCalendar(data){
 					$('<img>').attr('src', '/static/img/'+this.eventsThisInterval[eventIndex].chore+'.png').
 						addClass('img-format'))
 			}
-			;
+			// add vertical alignment to all calendar cells
+			$('.day').attr('valign','top');
 		}
 	});
 }
 
+var doneLookup = {true: "Done", false: "Not Yet"}
 
