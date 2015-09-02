@@ -40,9 +40,9 @@ It uses the following tech stack:
 * Here they can check chores once complete to update the status in the Calendar View
 
 ### Twilio API
-> Invited users will receive a text message with a direct link to a special invited user registration page
+* Invited users will receive a text message with a direct link to a special invited user registration page
 ![Invite](https://raw.githubusercontent.com/janet/choreme/master/static/img/readme-twilio-invite.png)
-> Alerts will also be sent on the day chores are due to remind users 
+* Alerts will also be sent on the day chores are due to remind users 
 ![Alert](https://raw.githubusercontent.com/janet/choreme/master/static/img/readme-twilio-alert.png)
 
 **Contact Info: Janet Kenmotsu**
