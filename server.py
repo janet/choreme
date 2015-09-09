@@ -496,10 +496,11 @@ def render_personal_chores():
 
     user_chores_dict = {}
     for user_chore in user.user_chores:
-        if user_chore.due_date.strftime("%m/%d/%y") in user_chores_dict:
-            user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")].append((user_chore.chore.name, user_chore.is_done, user_chore.id))
-        else:
-            user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")] = [(user_chore.chore.name, user_chore.is_done, user_chore.id)]
+        if user_chore.is_active == True:
+            if user_chore.due_date.strftime("%m/%d/%y") in user_chores_dict:
+                user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")].append((user_chore.chore.name, user_chore.is_done, user_chore.id))
+            else:
+                user_chores_dict[user_chore.due_date.strftime("%m/%d/%y")] = [(user_chore.chore.name, user_chore.is_done, user_chore.id)]
     print user_chores_dict
     return jsonify(user_chores_dict)
 
