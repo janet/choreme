@@ -7,6 +7,7 @@ from model import User, House, HouseChore, Chore, UserChore
 from twilio.rest import TwilioRestClient 
 import twilio.twiml
 import os
+import binascii
 
 ############################################################################## 
 # Flask 
@@ -75,9 +76,16 @@ def add_admin_user():
     phone = request.form.get('phone')
     password = request.form.get('password')
 
+    # create unique salt for password hashing
+    salt = binascii.hexlify(os.urandom(7))
+
+    print "salt: ", salt
+    print "password_hash: ", hash(salt+password)
+
     new_user = User(username=username,
                     phone=phone,
-                    password=password,
+                    password_salt=salt,
+                    password_hash=hash(salt+password),
                     is_admin=True)
 
     db.session.add(new_user)
@@ -88,7 +96,6 @@ def add_admin_user():
 
     session['user_id'] = admin_user_id
     print session['user_id']
-    # flash("session user_id: " + str(session['user_id']))
 
     return redirect('/create_house_pref')
 
@@ -105,7 +112,11 @@ def add_invited_user():
     # update user in database
     user = User.query.get(user_id)
     user.username = username
-    user.password = password
+    # create salt for password security
+    salt = binascii.hexlify(os.urandom(7))
+    user.password_salt = salt
+    # prepend salt to password and store hash in database
+    user.password_hash = hash(salt + password)
 
     # commit changes to the database
     db.session.commit()
@@ -539,7 +550,8 @@ def process_login():
     
     try:
         user = User.query.filter_by(username=username).one()
-        if user.password != password:
+        password_entered_hash = user.password_salt + hash(password)
+        if user.password_hash != password_entered_hash:
             flash("Password not recognized. Please re-enter.")
             return redirect('/') #re-enter password
         else:
@@ -578,4 +590,4 @@ if __name__ == "__main__":
 
     # DebugToolbarExtension(app)
 
-    app.run(debug=False)
+    app.run(debug=True)

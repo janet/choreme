@@ -4,6 +4,7 @@ from model import User, House, HouseChore, Chore, UserChore
 from model import connect_to_db, db
 from server import app
 from datetime import datetime
+import os
 
 def load_users():
     """Load users from u.user into database."""
@@ -11,11 +12,14 @@ def load_users():
     for line in seed_file:  
         line = line.rstrip()
         seed_line = line.split("|")
+
+        salt = os.urandom(7)
         
         new_user = User(
             house_id=int(seed_line[0]),
             username=seed_line[1],
-            password=seed_line[2],
+            password_salt=salt,
+            password_hash=hash(salt + seed_line[2]),
             phone=int(seed_line[3]),
             is_admin=bool(seed_line[4])
             )

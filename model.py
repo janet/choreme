@@ -14,7 +14,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=True)
     username = db.Column(db.String(64), nullable=True, unique=True)
-    password = db.Column(db.String(64), nullable=True)
+    password_salt = db.Column(db.String(20), nullable=True)
+    password_hash = db.Column(db.String(64), nullable=True)
     phone = db.Column(db.String(12), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
@@ -112,7 +113,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///choreme.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/choremedb'
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     # app.config['SQLALCHEMY_RECORD_QUERIES'] = True
     db.app = app
