@@ -9,7 +9,7 @@ db = SQLAlchemy()
 class User(db.Model):
     """User information"""
 
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=True)
@@ -83,7 +83,7 @@ class UserChore(db.Model):
     __tablename__ = "user_chore"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     chore_id = db.Column(db.Integer, db.ForeignKey('chore.id'), nullable=False)
     is_done = db.Column(db.Boolean, nullable=False, default=False)
     due_date = db.Column(db.DateTime, nullable=False)

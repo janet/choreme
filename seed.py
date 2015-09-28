@@ -5,6 +5,7 @@ from model import connect_to_db, db
 from server import app
 from datetime import datetime
 import os
+import binascii
 
 def load_users():
     """Load users from u.user into database."""
@@ -13,7 +14,7 @@ def load_users():
         line = line.rstrip()
         seed_line = line.split("|")
 
-        salt = os.urandom(7)
+        salt = binascii.hexlify(os.urandom(7))
         
         new_user = User(
             house_id=int(seed_line[0]),
@@ -91,13 +92,17 @@ def load_user_chore():
 
 if __name__ == "__main__":
     connect_to_db(app)
-    db.drop_all()
+    db.delete(Chore)
+    db.delete(UserChore)
+    db.delete(HouseChore)
+    db.delete(User)
+    db.delete(House)
     db.create_all()
 
     # import pdb; pdb.set_trace()
 
     load_houses()
     load_users()
-    load_house_chore()
     load_chore()
+    load_house_chore()
     load_user_chore()
