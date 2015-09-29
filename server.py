@@ -164,10 +164,10 @@ def create_house_pref():
         # get the current chore information to display for reference purposes
         house_name = House.query.get(session["house_id"]).name
         # over-write the admin phone from before in case a non-admin is viewing
-        admin_phone = User.query.filter(User.house_id==session['house_id'], User.is_admin==1).one().phone
+        admin_phone = User.query.filter(User.house_id==session['house_id'], User.is_admin==True).one().phone
 
         # unpack this in jinja to get the housemate phones
-        housemates_list = User.query.filter(User.house_id==session['house_id'], User.is_admin==0).all()
+        housemates_list = User.query.filter(User.house_id==session['house_id'], User.is_admin==False).all()
 
         # get house_chores
         housechores_list = HouseChore.query.filter(HouseChore.house_id==session['house_id']).all()
