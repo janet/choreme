@@ -92,11 +92,7 @@ def load_user_chore():
 
 if __name__ == "__main__":
     connect_to_db(app)
-    db.delete(Chore)
-    db.delete(UserChore)
-    db.delete(HouseChore)
-    db.delete(User)
-    db.delete(House)
+    db.drop_all()
     db.create_all()
 
     # import pdb; pdb.set_trace()
