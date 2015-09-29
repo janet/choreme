@@ -20,7 +20,7 @@ def load_users():
             house_id=int(seed_line[0]),
             username=seed_line[1],
             password_salt=salt,
-            password_hash=hash(salt + seed_line[2]),
+            password_hash=str(hash(salt + seed_line[2])),
             phone=int(seed_line[3]),
             is_admin=bool(seed_line[4])
             )

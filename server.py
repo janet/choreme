@@ -550,8 +550,8 @@ def process_login():
     
     try:
         user = User.query.filter_by(username=username).one()
-        password_entered_hash = user.password_salt + hash(password)
-        if user.password_hash != password_entered_hash:
+        password_entered_hash = str(hash(user.password_salt + password))
+        if str(user.password_hash) != password_entered_hash:
             flash("Password not recognized. Please re-enter.")
             return redirect('/') #re-enter password
         else:
