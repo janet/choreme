@@ -25,7 +25,7 @@ class User(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return "<User user_id=%s username=%s>" % (self.id, self.username)
+        return "<User user_id={0!s} username={1!s}>".format(self.id, self.username)
 
 class House(db.Model):
     """House information"""
@@ -39,7 +39,7 @@ class House(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return "<House house_id=%s house_name=%s>" % (self.id, self.name)
+        return "<House house_id={0!s} house_name={1!s}>".format(self.id, self.name)
 
 class HouseChore(db.Model):
     """House chore with house preferred frequency & due date"""
@@ -62,7 +62,7 @@ class HouseChore(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return "<HouseChore house_chore_id=%s chore_id= %s day=%s week_freq=%s>" % (self.id, self.chore_id, self.day, self.week_freq)
+        return "<HouseChore house_chore_id={0!s} chore_id= {1!s} day={2!s} week_freq={3!s}>".format(self.id, self.chore_id, self.day, self.week_freq)
 
 class Chore(db.Model):
     """Generic chore object"""
@@ -75,7 +75,7 @@ class Chore(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return "<Chore chore_id=%s chore_name=%s>" % (self.id, self.name)
+        return "<Chore chore_id={0!s} chore_name={1!s}>".format(self.id, self.name)
 
 class UserChore(db.Model):
     """Chore that is assigned to a user with a due date"""
@@ -100,7 +100,7 @@ class UserChore(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return "<UserChore user_chore_id=%s is_done=%s due_date=%s active=%s>" % (self.id, self.is_done, self.due_date.strftime("%m/%d/%y"), self.is_active)
+        return "<UserChore user_chore_id={0!s} is_done={1!s} due_date={2!s} active={3!s}>".format(self.id, self.is_done, self.due_date.strftime("%m/%d/%y"), self.is_active)
 
 
 
