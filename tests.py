@@ -93,7 +93,7 @@ class ServerTestCase(unittest.TestCase):
 
         # use enumerate to create an index for each house chore that allows for easy assignment
         for index, house_chore in enumerate(house.house_chores):
-            print "index: %s, house_chore: %s" % (index, house_chore)
+            print "index: {0!s}, house_chore: {1!s}".format(index, house_chore)
 
             # while schedule start day (ie Sunday) != house chore day
             while datetime.datetime.strftime(init_sched_date,"%A") != house_chore.day: 
@@ -113,7 +113,7 @@ class ServerTestCase(unittest.TestCase):
                 housemate = housemates_list[(index + i) % num_housemates]
                 print "HOUSEMATE: ", housemate
 
-                print "user_id: %s, chore_id: %s, due_date: %s" % (housemate.id, house_chore.chore.id, due_date.strftime("%A, %m/%d/%y"))
+                print "user_id: {0!s}, chore_id: {1!s}, due_date: {2!s}".format(housemate.id, house_chore.chore.id, due_date.strftime("%A, %m/%d/%y"))
 
                 new_userchore = UserChore(user_id=housemate.id, 
                                             chore_id=house_chore.chore.id,
